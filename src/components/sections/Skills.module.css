@@ -1,0 +1,75 @@
+.skills {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.container {
+  width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--space-sm);
+}
+
+.head {
+  margin-bottom: var(--space-xl);
+}
+
+.overline {
+  margin-bottom: var(--space-sm);
+}
+
+.heading {
+  font-size: clamp(1.8rem, 3.8vw, 2.4rem);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-lg); /* added space before groups */
+}
+
+/* ---- Groups ---- */
+.groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg); /* reduced gap between skill groups */
+}
+
+.groupHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.groupTitle {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--text-dim);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Tech as understated text, dot-separated */
+.tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+.tech span {
+  opacity: 0.9;
+  transition: color var(--transition);
+}
+
+.tech span:hover {
+  color: var(--text);
+}
+
+.tech span:not(:last-child)::after {
+  content: "·";
+  margin-left: var(--space-xs);
+  color: var(--accent);
+  opacity: 0.5;
+}

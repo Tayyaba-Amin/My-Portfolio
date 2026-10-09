@@ -1,0 +1,529 @@
+/*
+ * index.css — global design system
+ *
+ * Palette: Midnight Teal & Silver with warm off-white alternates.
+ * Dark: bg #101C1D, surfaces #193536, text #E2E9E7, accent #68B7A8.
+ * Light: bg #F3F0E9, surfaces #193536, text #182526, accent #68B7A8.
+ *
+ * Typography: Playfair Display (serif) for expressive headlines,
+ * Inter (sans) for navigation and body copy.
+ */
+
+/* ============================================================ */
+/* 1. CSS RESET                                                  */
+/* ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 18px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (max-width: 1024px) {
+  html {
+    font-size: 16.5px;
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: 300;
+  line-height: 1.7;
+  letter-spacing: -0.01em;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================ */
+/* 2. DESIGN TOKENS                                              */
+/* ============================================================ */
+
+:root {
+  /* ---- Palette: Midnight Teal & Silver ---- */
+  --color-midnight: #101c1d; /* main page background */
+  --color-dark-teal: #193536; /* secondary surfaces & cards */
+  --color-silver: #e2e9e7; /* main headings & body text on dark */
+  --color-teal-accent: #68b7a8; /* accent for links, buttons, active states */
+  --color-muted-silver: #8d9fa3; /* secondary text & subtle borders on dark */
+  --color-off-white: #f3f0e9; /* warm off-white for light sections */
+  --color-dark-ink: #182526; /* dark ink for text on light backgrounds */
+
+  /* ---- Typography ---- */
+  --font-sans:
+    "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-serif:
+    "Playfair Display", "Times New Roman", serif;
+  --font-mono:
+    ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono",
+    monospace;
+
+  --text-xs: clamp(0.6rem, 1.2vw, 0.7rem);
+  --text-sm: clamp(0.75rem, 1.4vw, 0.85rem);
+  --text-base: clamp(0.875rem, 1.6vw, 1rem);
+  --text-lg: clamp(1rem, 1.8vw, 1.15rem);
+  --text-xl: clamp(1.15rem, 2.2vw, 1.3rem);
+  --text-2xl: clamp(1.4rem, 2.8vw, 1.6rem);
+  --text-3xl: clamp(1.7rem, 3.6vw, 2rem);
+  --text-4xl: clamp(2.1rem, 4.6vw, 2.6rem);
+  --text-5xl: clamp(2.6rem, 6vw, 3.4rem);
+  --text-6xl: clamp(3.2rem, 7.2vw, 4.4rem);
+
+  --weight-regular: 300;
+  --weight-medium: 400;
+  --weight-semibold: 500;
+  --weight-bold: 700;
+
+  /* ---- Spacing ---- */
+  --space-xs: clamp(0.4rem, 0.8vw, 0.6rem);
+  --space-sm: clamp(0.6rem, 1.2vw, 0.9rem);
+  --space-md: clamp(0.85rem, 1.8vw, 1.25rem);
+  --space-lg: clamp(1rem, 2.4vw, 1.75rem);
+  --space-xl: clamp(1.4rem, 3.4vw, 2.5rem);
+  --space-2xl: clamp(2rem, 4.8vw, 3.5rem);
+
+  --max-width: min(1180px, 88vw);
+
+  /* ---- Corners & effects ---- */
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 0; /* mostly square */
+  --transition: 0.22s ease;
+  --transition-slow: 0.45s ease;
+
+  --shadow-soft: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+/* ---- Theme: dark (midnight) — default page background ---- */
+:root {
+  --bg: var(--color-midnight);
+  --surface: var(--color-dark-teal);
+  --surface-alt: var(--color-midnight);
+  --text: var(--color-silver);
+  --text-dim: var(--color-muted-silver);
+  --accent: var(--color-teal-accent);
+  --accent-subtle: color-mix(in srgb, var(--color-teal-accent) 18%, transparent);
+  --border: color-mix(in srgb, var(--color-muted-silver) 30%, transparent);
+  --divide: color-mix(in srgb, var(--color-muted-silver) 20%, transparent);
+}
+
+/* ---- Theme: dark (midnight) — explicit for dark sections ---- */
+.theme-dark {
+  --bg: var(--color-midnight);
+  --surface: var(--color-dark-teal);
+  --surface-alt: var(--color-midnight);
+  --text: var(--color-silver);
+  --text-dim: var(--color-muted-silver);
+  --accent: var(--color-teal-accent);
+  --accent-subtle: color-mix(in srgb, var(--color-teal-accent) 18%, transparent);
+  --border: color-mix(in srgb, var(--color-muted-silver) 30%, transparent);
+  --divide: color-mix(in srgb, var(--color-muted-silver) 20%, transparent);
+}
+
+/* ---- Theme: light (off-white) — for alternating sections ---- */
+.theme-light {
+  --bg: var(--color-off-white);
+  --surface: var(--color-dark-teal);
+  --surface-alt: var(--color-off-white);
+  --text: var(--color-dark-ink);
+  --text-dim: color-mix(in srgb, var(--color-dark-ink) 75%, transparent);
+  --accent: var(--color-teal-accent);
+  --accent-subtle: color-mix(in srgb, var(--color-teal-accent) 18%, transparent);
+  --border: color-mix(in srgb, var(--color-dark-ink) 20%, transparent);
+  --divide: color-mix(in srgb, var(--color-dark-ink) 12%, transparent);
+}
+
+/* ---- Button variants for light/dark adaptation ---- */
+/* Primary button: solid background, high contrast */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), transform var(--transition);
+}
+
+/* On dark backgrounds: light button with dark text */
+:root:not(.theme-light) .btn-primary,
+.theme-dark .btn-primary {
+  background: var(--color-silver);
+  color: var(--color-midnight);
+}
+
+:root:not(.theme-light) .btn-primary:hover,
+:root:not(.theme-light) .btn-primary:focus-visible,
+.theme-dark .btn-primary:hover,
+.theme-dark .btn-primary:focus-visible {
+  background: var(--color-teal-accent);
+  color: var(--color-midnight);
+  transform: translateY(-1px);
+}
+
+/* On light backgrounds: dark button with light text */
+.theme-light .btn-primary {
+  background: var(--color-midnight);
+  color: var(--color-off-white);
+}
+
+.theme-light .btn-primary:hover,
+.theme-light .btn-primary:focus-visible {
+  background: var(--color-dark-teal);
+  color: var(--color-silver);
+  transform: translateY(-1px);
+}
+
+/* Secondary button: transparent with border */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-sm);
+  border: 1px solid;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+/* On dark backgrounds: light border/text */
+:root:not(.theme-light) .btn-secondary,
+.theme-dark .btn-secondary {
+  color: var(--color-silver);
+  border-color: var(--border);
+}
+
+:root:not(.theme-light) .btn-secondary:hover,
+:root:not(.theme-light) .btn-secondary:focus-visible,
+.theme-dark .btn-secondary:hover,
+.theme-dark .btn-secondary:focus-visible {
+  background: var(--accent-subtle);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* On light backgrounds: dark border/text */
+.theme-light .btn-secondary {
+  color: var(--color-dark-ink);
+  border-color: var(--border);
+}
+
+.theme-light .btn-secondary:hover,
+.theme-light .btn-secondary:focus-visible {
+  background: var(--accent-subtle);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Icon-only button (for footer social links) */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  border: 1px solid;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), border-color var(--transition), transform var(--transition);
+}
+
+:root:not(.theme-light) .btn-icon,
+.theme-dark .btn-icon {
+  color: var(--color-silver);
+  border-color: var(--border);
+}
+
+:root:not(.theme-light) .btn-icon:hover,
+:root:not(.theme-light) .btn-icon:focus-visible,
+.theme-dark .btn-icon:hover,
+.theme-dark .btn-icon:focus-visible {
+  background: var(--accent-subtle);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.theme-light .btn-icon {
+  color: var(--color-dark-ink);
+  border-color: var(--border);
+}
+
+.theme-light .btn-icon:hover,
+.theme-light .btn-icon:focus-visible {
+  background: var(--accent-subtle);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+/* Focus visible for all buttons */
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.btn-icon:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ============================================================ */
+/* 3. BASE STYLES                                                */
+/* ============================================================ */
+
+:root {
+  background: var(--bg);
+  color: var(--text);
+}
+
+#root {
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Typography: headings use the expressive serif */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin: 0;
+}
+
+h1 {
+  font-size: var(--text-6xl);
+}
+
+h2 {
+  font-size: var(--text-4xl);
+  letter-spacing: -0.015em;
+}
+
+h3 {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+img,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  font-weight: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ============================================================ */
+/* 4. LAYOUT UTILITIES                                           */
+/* ============================================================ */
+/* 4. LAYOUT UTILITIES                                           */
+/* ============================================================ */
+
+.container {
+  width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--space-sm);
+}
+
+/* ============================================================ */
+/* 5. EDITORIAL PRIMITIVES                                        */
+/* ============================================================ */
+
+/* Running number / kicker label, e.g. "01" */
+.number {
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+}
+
+/* Small uppercase metadata label */
+.overline {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+}
+
+/* Thin editorial divider */
+.rule {
+  width: 100%;
+  height: 1px;
+  background: var(--divide);
+}
+
+.rule-short {
+  width: 1.5rem;
+  height: 1px;
+  background: var(--text-dim);
+}
+
+/* Arrow link — simple text + arrow, no pill styling */
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text);
+  transition: gap var(--transition), color var(--transition);
+}
+
+.link-arrow:hover,
+.link-arrow:focus-visible {
+  color: var(--accent);
+  gap: var(--space-sm);
+}
+
+.link-arrow:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.link-arrow svg {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+}
+
+/* ============================================================ */
+/* 6. SHARED COMPONENT STYLES                                     */
+/* ============================================================ */
+
+/* Image placeholder — plum panel with centered fallback text */
+.image-wrap {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  aspect-ratio: 16 / 9;
+}
+
+.image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.image-wrap img:hover {
+  transform: scale(1.03);
+}
+
+.image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-sm);
+}
+
+.image-placeholder-text {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Tag / tech label — plain text, not a pill */
+.tech-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+
+.tech-list span {
+  opacity: 0.85;
+}
+
+.tech-list span:not(:last-child)::after {
+  content: "·";
+  margin-left: var(--space-xs);
+  opacity: 0.5;
+  color: var(--accent);
+}

@@ -1,0 +1,37 @@
+.image,
+.placeholder {
+  width: 100%;
+  display: block;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.image {
+  object-position: center;
+}
+
+.image:hover {
+  transform: scale(1.03);
+}
+
+/* Keep the placeholder from shifting layout */
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-sm);
+  cursor: default;
+}
+
+.placeholderText {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
