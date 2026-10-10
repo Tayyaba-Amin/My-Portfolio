@@ -1,5 +1,6 @@
 .entry {
   border-top: 1px solid var(--border);
+  padding-top: var(--space-sm);
 }
 
 .entry:first-child {
