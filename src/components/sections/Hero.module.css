@@ -126,20 +126,21 @@
   letter-spacing: -0.04em;
 }
 
-/* The typed line and its invisible layout twin share one box. */
+/* The typed line and its invisible layout twin share one box. Both are real
+   grid items in the same cell, so the box grows to the taller of the two and
+   typed text can never spill into the tagline below. */
 .typeStack {
-  position: relative;
-  display: block;
+  display: grid;
 }
 
 .typeSizer {
+  grid-area: 1 / 1;
   display: block;
   visibility: hidden;
 }
 
 .typeLive {
-  position: absolute;
-  inset: 0;
+  grid-area: 1 / 1;
 }
 
 .greeting {
@@ -163,8 +164,10 @@
 
 /* ---- Tagline ---- */
 
+/* Same stacking trick for the tagline: the reserved final line and the
+   rotating role share one cell, so neither can overlap the intro. */
 .tagWrap {
-  position: relative;
+  display: grid;
   margin-bottom: 1rem;
 }
 
@@ -180,13 +183,13 @@
 }
 
 .tagSizer {
+  grid-area: 1 / 1;
   visibility: hidden;
 }
 
 /* Sits over the reserved height, so the line never changes its footprint. */
 .tagLive {
-  position: absolute;
-  inset: 0;
+  grid-area: 1 / 1;
   align-content: center;
 }
 
@@ -766,6 +769,13 @@
     max-width: 40rem;
     margin-inline: auto;
     text-align: center;
+  }
+
+  /* The heading claims the whole column. Without this it shrinks to the
+     name's width, and a sliver of caret width can tip the name into a
+     second line that lands on top of the tagline. */
+  .title {
+    width: 100%;
   }
 
   .tagline {
