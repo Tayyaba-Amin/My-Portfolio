@@ -14,10 +14,10 @@
   background:
     radial-gradient(
       90% 120% at 50% -25%,
-      rgba(139, 92, 246, 0.24) 0%,
+      rgba(255, 107, 129, 0.22) 0%,
       transparent 62%
     ),
-    linear-gradient(180deg, rgba(25, 35, 56, 0.92) 0%, rgba(17, 24, 39, 0.96) 100%);
+    linear-gradient(180deg, rgba(41, 32, 53, 0.92) 0%, rgba(33, 25, 43, 0.96) 100%);
   box-shadow: var(--shadow-lg);
 }
 
@@ -28,8 +28,8 @@
   inset: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(to right, rgba(170, 182, 202, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(170, 182, 202, 0.05) 1px, transparent 1px);
+    linear-gradient(to right, rgba(201, 188, 202, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(201, 188, 202, 0.05) 1px, transparent 1px);
   background-size: 56px 56px;
   -webkit-mask-image: radial-gradient(70% 70% at 50% 20%, #000 0%, transparent 100%);
   mask-image: radial-gradient(70% 70% at 50% 20%, #000 0%, transparent 100%);
@@ -46,7 +46,7 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(167, 139, 250, 0.85),
+    rgba(255, 160, 174, 0.85),
     transparent
   );
 }
@@ -83,8 +83,35 @@
 }
 
 a.emailBtn {
+  position: relative;
   padding: 0.95rem 1.55rem;
   font-size: 0.92rem;
+}
+
+/* One soft ring pulse draws the eye to the primary action. */
+a.emailBtn::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 107, 129, 0.6);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.card:global(.is-visible) a.emailBtn::after {
+  animation: cta-ring 1.4s var(--ease-out) 600ms forwards;
+}
+
+@keyframes cta-ring {
+  0% {
+    opacity: 0.75;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.14);
+  }
 }
 
 .emailText {
@@ -100,7 +127,7 @@ a.emailBtn {
 .emailText:hover,
 .emailText:focus-visible {
   color: var(--text);
-  border-color: var(--violet);
+  border-color: var(--coral);
 }
 
 /* ---- Social buttons ---- */
@@ -123,7 +150,7 @@ a.emailBtn {
   padding: 0.55rem 0.95rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-xs);
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(248, 241, 235, 0.03);
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--text-dim);
@@ -144,8 +171,8 @@ a.emailBtn {
 .social:hover,
 .social:focus-visible {
   color: var(--text);
-  border-color: rgba(139, 92, 246, 0.55);
-  background: var(--violet-soft);
+  border-color: rgba(255, 107, 129, 0.55);
+  background: var(--coral-soft);
   transform: translateY(-2px);
 }
 
@@ -168,7 +195,7 @@ a.emailBtn {
   width: 0.8rem;
   height: 0.8rem;
   flex-shrink: 0;
-  color: var(--violet-bright);
+  color: var(--coral);
 }
 
 @media (max-width: 420px) {

@@ -17,14 +17,14 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(to right, rgba(170, 182, 202, 0.055) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(170, 182, 202, 0.055) 1px, transparent 1px);
+    linear-gradient(to right, rgba(201, 188, 202, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(201, 188, 202, 0.055) 1px, transparent 1px);
   background-size: 72px 72px;
   -webkit-mask-image: radial-gradient(70% 65% at 42% 32%, #000 0%, transparent 100%);
   mask-image: radial-gradient(70% 65% at 42% 32%, #000 0%, transparent 100%);
 }
 
-.glowViolet {
+.glowCoral {
   position: absolute;
   top: -18rem;
   left: -14rem;
@@ -33,13 +33,13 @@
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(139, 92, 246, 0.26) 0%,
-    rgba(139, 92, 246, 0.06) 45%,
+    rgba(255, 107, 129, 0.2) 0%,
+    rgba(255, 107, 129, 0.05) 45%,
     transparent 68%
   );
 }
 
-.glowCyan {
+.glowLilac {
   position: absolute;
   right: -12rem;
   bottom: -16rem;
@@ -48,9 +48,33 @@
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(34, 211, 238, 0.13) 0%,
+    rgba(196, 161, 255, 0.14) 0%,
     transparent 65%
   );
+}
+
+/* Signature interaction: a soft light that follows a fine pointer. */
+.spotlight {
+  position: absolute;
+  inset: -10%;
+  opacity: 0;
+  background: radial-gradient(
+    30rem 30rem at var(--spot-x, 68%) var(--spot-y, 32%),
+    rgba(255, 107, 129, 0.16) 0%,
+    rgba(196, 161, 255, 0.06) 42%,
+    transparent 68%
+  );
+  transition: opacity 900ms var(--ease);
+}
+
+:global(html.js) .spotlight {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .spotlight {
+    display: none;
+  }
 }
 
 /* ---- Layout ---- */
@@ -79,7 +103,7 @@
   padding: 0.4rem 0.8rem;
   border: 1px solid var(--border);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(248, 241, 235, 0.03);
   font-size: 0.76rem;
   font-weight: 500;
   color: var(--text-dim);
@@ -89,13 +113,10 @@
   width: 0.8rem;
   height: 0.8rem;
   flex-shrink: 0;
-  color: var(--violet-bright);
+  color: var(--coral);
 }
 
 .title {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
   margin-bottom: 1.25rem;
   font-size: clamp(2.5rem, 5.2vw, 4rem);
   font-weight: 600;
@@ -103,7 +124,24 @@
   letter-spacing: -0.04em;
 }
 
+/* The typed line and its invisible layout twin share one box. */
+.typeStack {
+  position: relative;
+  display: block;
+}
+
+.typeSizer {
+  display: block;
+  visibility: hidden;
+}
+
+.typeLive {
+  position: absolute;
+  inset: 0;
+}
+
 .greeting {
+  display: block;
   font-family: var(--font-display);
   font-size: clamp(0.95rem, 1.6vw, 1.1rem);
   font-weight: 500;
@@ -113,7 +151,19 @@
 
 .name {
   display: block;
+  margin-top: 0.35rem;
   color: var(--text);
+}
+
+.surname {
+  color: inherit;
+}
+
+/* ---- Tagline ---- */
+
+.tagWrap {
+  position: relative;
+  margin-bottom: 1rem;
 }
 
 .tagline {
@@ -122,15 +172,65 @@
   align-items: center;
   column-gap: 0.6rem;
   row-gap: 0.15rem;
-  margin-bottom: 1rem;
   font-size: 0.95rem;
   font-weight: 500;
   color: var(--text);
 }
 
+.tagSizer {
+  visibility: hidden;
+}
+
+/* Sits over the reserved height, so the line never changes its footprint. */
+.tagLive {
+  position: absolute;
+  inset: 0;
+  align-content: center;
+}
+
+.tagLive[data-settled] > span {
+  animation: tag-settle 520ms var(--ease-out) backwards;
+}
+
+.tagLive[data-settled] > span:nth-child(2) {
+  animation-delay: 70ms;
+}
+
+.tagLive[data-settled] > span:nth-child(3) {
+  animation-delay: 140ms;
+}
+
+@keyframes tag-settle {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Keeps the caret glued to the last character instead of the flex gap. */
+.tagRun {
+  display: inline-flex;
+  align-items: center;
+}
+
+.tagCaret {
+  display: inline-block;
+  width: 0.075em;
+  height: 0.9em;
+  margin-left: 0.055em;
+  vertical-align: -0.06em;
+  border-radius: 1px;
+  background: var(--coral);
+  animation: caret-blink 1.05s steps(1) infinite;
+}
+
 .pipe {
   font-weight: 400;
-  color: var(--violet);
+  color: var(--lilac);
 }
 
 .intro {
@@ -179,11 +279,11 @@
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(139, 92, 246, 0.32) 0%,
-    rgba(34, 211, 238, 0.08) 52%,
+    rgba(255, 107, 129, 0.26) 0%,
+    rgba(196, 161, 255, 0.08) 52%,
     transparent 72%
   );
-  filter: blur(28px);
+  filter: blur(26px);
 }
 
 .frame {
@@ -193,12 +293,12 @@
   border-radius: 26px;
   background: linear-gradient(
     155deg,
-    rgba(196, 181, 253, 0.55) 0%,
-    rgba(139, 92, 246, 0.28) 38%,
-    rgba(34, 211, 238, 0.2) 72%,
-    rgba(255, 255, 255, 0.05) 100%
+    rgba(255, 198, 168, 0.5) 0%,
+    rgba(255, 107, 129, 0.3) 38%,
+    rgba(196, 161, 255, 0.26) 72%,
+    rgba(248, 241, 235, 0.06) 100%
   );
-  box-shadow: 0 45px 90px -50px rgba(2, 6, 23, 0.95);
+  box-shadow: 0 45px 90px -50px rgba(8, 4, 12, 0.95);
 }
 
 .frame img {
@@ -207,6 +307,17 @@
   border-radius: 18px;
   object-fit: cover;
   object-position: center 22%;
+}
+
+/* Curtain that lifts off the photo as the portrait arrives. */
+.frame::after {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  z-index: 2;
+  border-radius: 18px;
+  pointer-events: none;
+  background: linear-gradient(180deg, #2a2036 0%, #1d1627 100%);
 }
 
 /* Glass info card sits below the portrait with a deliberate gap. */
@@ -218,7 +329,7 @@
   padding: 0.75rem 0.3rem;
   border: 1px solid var(--border-strong);
   border-radius: 14px;
-  background: rgba(17, 24, 39, 0.94);
+  background: rgba(33, 25, 43, 0.94);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   box-shadow: var(--shadow-lg);
@@ -261,53 +372,50 @@
 /* ---- Entrance motion ---- */
 
 @media (prefers-reduced-motion: no-preference) {
-  .badge,
-  .intro {
-    animation: enter-up 700ms var(--ease-out) backwards;
+  .badge {
+    animation: enter-up 650ms var(--ease-out) backwards;
   }
 
   .intro {
-    animation-delay: 440ms;
-  }
-
-  .tagline > span {
-    animation: enter-up 600ms var(--ease-out) backwards;
-  }
-
-  .tagline > span:nth-child(1) {
-    animation-delay: 320ms;
-  }
-
-  .tagline > span:nth-child(2) {
-    animation-delay: 360ms;
-  }
-
-  .tagline > span:nth-child(3) {
-    animation-delay: 390ms;
+    animation: enter-up 700ms var(--ease-out) 2680ms backwards;
   }
 
   .actions > a {
-    animation: cta-in 700ms var(--ease-out) backwards;
+    animation: cta-in 650ms var(--ease-out) backwards;
   }
 
   .actions > a:nth-child(1) {
-    animation-delay: 500ms;
+    animation-delay: 2820ms;
   }
 
   .actions > a:nth-child(2) {
-    animation-delay: 570ms;
+    animation-delay: 2920ms;
   }
 
   .portrait {
-    animation: portrait-in 1.05s var(--ease-out) 360ms backwards;
+    animation: portrait-in 900ms var(--ease-out) 700ms backwards;
   }
 
   .frame img {
-    animation: portrait-img 1.25s var(--ease-out) 360ms backwards;
+    animation: portrait-img 1s var(--ease-out) 780ms backwards;
+  }
+
+  .frame::after {
+    animation: curtain-up 900ms var(--ease-out) 780ms both;
+    transform-origin: 50% 100%;
   }
 
   .infoCard {
-    animation: enter-up 700ms var(--ease-out) 700ms backwards;
+    animation: enter-up 700ms var(--ease-out) 1050ms backwards;
+  }
+
+  /* Gentle ambient drift, long enough to be felt rather than watched. */
+  .glowCoral {
+    animation: drift-a 26s ease-in-out infinite alternate;
+  }
+
+  .glowLilac {
+    animation: drift-b 32s ease-in-out infinite alternate;
   }
 
   @keyframes enter-up {
@@ -345,10 +453,37 @@
 
   @keyframes portrait-img {
     from {
-      transform: scale(1.08);
+      transform: scale(1.06);
     }
     to {
       transform: none;
+    }
+  }
+
+  @keyframes curtain-up {
+    from {
+      transform: scaleY(1);
+    }
+    to {
+      transform: scaleY(0);
+    }
+  }
+
+  @keyframes drift-a {
+    from {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    to {
+      transform: translate3d(4%, 6%, 0) scale(1.06);
+    }
+  }
+
+  @keyframes drift-b {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-5%, -4%, 0) scale(1.04);
     }
   }
 }
@@ -443,5 +578,13 @@
 
   .infoValue {
     font-size: 0.74rem;
+  }
+}
+
+/* Pointer-following light is a desktop nicety only. */
+@media (prefers-reduced-motion: reduce) {
+  .spotlight,
+  .frame::after {
+    display: none;
   }
 }

@@ -1,7 +1,8 @@
 import { personal, hero } from "../../config/siteData";
 import ImagePlaceholder from "../common/ImagePlaceholder";
-import SplitText from "../common/SplitText";
 import usePointerTilt from "../../hooks/usePointerTilt";
+import useTypewriter from "../../hooks/useTypewriter";
+import usePhraseRotation from "../../hooks/usePhraseRotation";
 import { ArrowIcon, EmailIcon, LocationIcon } from "../common/icons";
 import styles from "./Hero.module.css";
 
@@ -13,8 +14,49 @@ const [taglineLead, taglineRest] = hero.tagline
   .split("|")
   .map((part) => part.trim());
 
+/* "Hi, I'm " + "Tayyaba " + "Amin" — typed as three styled segments. */
+const NAME_SEGMENTS = [`${hero.greeting} `, `${givenName} `, surname];
+
+/* The roles already stated in the tagline, used for the opening rotation. */
+const ROLES = [
+  taglineLead,
+  ...taglineRest.split("&").map((role) => role.trim()),
+].filter(Boolean);
+
+function FinalTagline() {
+  return (
+    <>
+      <span>{taglineLead}</span>
+      {taglineRest && (
+        <>
+          <span className={styles.pipe} aria-hidden="true">
+            |
+          </span>
+          <span>{taglineRest}</span>
+        </>
+      )}
+    </>
+  );
+}
+
 export default function Hero() {
-  const sectionRef = usePointerTilt(7);
+  const sectionRef = usePointerTilt(6);
+
+  const name = useTypewriter(NAME_SEGMENTS, {
+    speed: 72,
+    startDelay: 260,
+    segmentGap: 130,
+    hold: 460,
+  });
+
+  // The tagline starts typing the moment the name settles.
+  const tagline = usePhraseRotation(ROLES, {
+    active: name.state === "done",
+    typeSpeed: 42,
+    deleteSpeed: 22,
+    hold: 800,
+    gap: 200,
+  });
 
   return (
     <section
@@ -25,8 +67,9 @@ export default function Hero() {
     >
       <div className={styles.backdrop} aria-hidden="true">
         <div className={styles.grid} />
-        <div className={styles.glowViolet} />
-        <div className={styles.glowCyan} />
+        <div className={styles.glowCoral} />
+        <div className={styles.glowLilac} />
+        <div className={styles.spotlight} />
       </div>
 
       <div className={`container ${styles.inner}`}>
@@ -37,48 +80,70 @@ export default function Hero() {
           </p>
 
           <h1 id="hero-heading" className={styles.title}>
-            <SplitText
-              as="span"
-              className={styles.greeting}
-              text={hero.greeting}
-              auto
-              delay={80}
-              stagger={70}
-            />
-            <span className={styles.name}>
-              <span className="split-word">
-                <span
-                  className="split-word-inner split-word-inner--auto"
-                  style={{ animationDelay: "150ms" }}
-                >
+            <span className="sr-only">{`${hero.greeting} ${personal.name}`}</span>
+
+            <span className={styles.typeStack} aria-hidden="true">
+              {/* Invisible final text reserves the exact layout height. */}
+              <span className={styles.typeSizer}>
+                <span className={styles.greeting}>{hero.greeting}</span>
+                <span className={styles.name}>
                   {givenName}{" "}
+                  <span className="text-gradient">{surname}</span>
                 </span>
               </span>
-              <span className="split-word">
-                <span
-                  className="split-word-inner split-word-inner--auto"
-                  style={{ animationDelay: "220ms" }}
-                >
-                  <span className="text-gradient">{surname}</span>
+
+              <span
+                ref={name.rootRef}
+                className={`type-live ${styles.typeLive}`}
+                data-state={name.state}
+              >
+                <span className={`type-seg ${styles.greeting}`}>
+                  <span className="type-chunk" data-type-chunk>
+                    {NAME_SEGMENTS[0]}
+                  </span>
+                  <span className="type-caret" aria-hidden="true" />
+                </span>
+                <span className={`type-seg ${styles.name}`}>
+                  <span className="type-chunk" data-type-chunk>
+                    {NAME_SEGMENTS[1]}
+                  </span>
+                  <span className="type-caret" aria-hidden="true" />
+                  <span className={`type-seg ${styles.surname}`}>
+                    <span className="type-chunk" data-type-chunk>
+                      {surname}
+                    </span>
+                    <span className="type-caret" aria-hidden="true" />
+                  </span>
                 </span>
               </span>
             </span>
           </h1>
 
-          <p className={styles.tagline}>
-            <span className={styles.tagSegment}>{taglineLead}</span>
-            {taglineRest && (
-              <>
-                <span
-                  className={`${styles.tagSegment} ${styles.pipe}`}
-                  aria-hidden="true"
-                >
-                  |
+          <div className={styles.tagWrap}>
+            <p className="sr-only">{hero.tagline}</p>
+
+            {/* Final line, invisible, keeps the rotating slot from shifting. */}
+            <p className={`${styles.tagline} ${styles.tagSizer}`} aria-hidden="true">
+              <FinalTagline />
+            </p>
+
+            <p
+              className={`${styles.tagline} ${styles.tagLive}`}
+              aria-hidden="true"
+              data-settled={tagline.done || undefined}
+            >
+              {tagline.done ? (
+                <FinalTagline />
+              ) : (
+                <span className={styles.tagRun}>
+                  <span className="type-chunk" ref={tagline.nodeRef} />
+                  {name.state === "done" && (
+                    <span className={styles.tagCaret} />
+                  )}
                 </span>
-                <span className={styles.tagSegment}>{taglineRest}</span>
-              </>
-            )}
-          </p>
+              )}
+            </p>
+          </div>
 
           <p className={styles.intro}>{hero.intro}</p>
 

@@ -7,13 +7,33 @@ const SECTION_IDS = navLinks.map((l) => l.href.slice(1));
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [closing, setClosing] = useState(false);
   const [active, setActive] = useState(SECTION_IDS[0]);
   const [scrolled, setScrolled] = useState(false);
   const panelRef = useRef(null);
   const menuBtnRef = useRef(null);
   const headerRef = useRef(null);
+  const closeTimer = useRef(0);
 
-  const close = () => setOpen(false);
+  // Let the panel animate out before it unmounts (unless motion is reduced).
+  const close = () => {
+    if (!open) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setOpen(false);
+      setClosing(false);
+      return;
+    }
+
+    setClosing(true);
+    window.clearTimeout(closeTimer.current);
+    closeTimer.current = window.setTimeout(() => {
+      setOpen(false);
+      setClosing(false);
+    }, 200);
+  };
+
+  useEffect(() => () => window.clearTimeout(closeTimer.current), []);
 
   // Scroll state + active section.
   useEffect(() => {
@@ -52,7 +72,11 @@ export default function Navbar() {
     if (!open) return;
 
     const onKey = (e) => {
-      if (e.key === "Escape") close();
+      if (e.key === "Escape") {
+        // Return focus where the menu was opened before the panel unmounts.
+        menuBtnRef.current?.focus();
+        close();
+      }
     };
     const onClick = (e) => {
       if (panelRef.current?.contains(e.target)) return;
@@ -124,7 +148,15 @@ export default function Navbar() {
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
-            onClick={() => setOpen((o) => !o)}
+            onClick={() => {
+              if (open) {
+                close();
+                return;
+              }
+              window.clearTimeout(closeTimer.current);
+              setClosing(false);
+              setOpen(true);
+            }}
           >
             {open ? <CloseIcon /> : <MenuIcon />}
           </button>
@@ -132,7 +164,12 @@ export default function Navbar() {
       </nav>
 
       {open && (
-        <div id="mobile-menu" ref={panelRef} className={styles.panel}>
+        <div
+          id="mobile-menu"
+          ref={panelRef}
+          className={styles.panel}
+          data-closing={closing || undefined}
+        >
           <div className={`container ${styles.panelInner}`}>
             {navLinks.map(({ label, href }, i) => (
               <a

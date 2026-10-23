@@ -23,6 +23,7 @@ export default function About() {
             delay={60}
             stagger={55}
           />
+          <span className={styles.headRule} data-reveal="rule" aria-hidden="true" />
         </header>
 
         <div

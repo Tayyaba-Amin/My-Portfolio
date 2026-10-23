@@ -1,7 +1,7 @@
 /* ==========================================================================
    Tayyaba Amin — portfolio design system
 
-   Palette : midnight navy, soft slate surfaces, violet + cyan accents
+   Palette : midnight plum, warm parchment text, electric coral + lilac
    Type    : Space Grotesk (display) · Inter (body)
    ========================================================================== */
 
@@ -10,39 +10,39 @@
    ========================================================================== */
 
 :root {
-  /* Surfaces */
-  --bg: #0b1020;
-  --bg-soft: #111827;
-  --surface: #192338;
-  --surface-2: #1e2a42;
+  /* Surfaces — midnight plum */
+  --bg: #15111f;
+  --bg-soft: #21192b;
+  --surface: #292035;
+  --surface-2: #332843;
 
-  /* Text */
-  --text: #f8fafc;
-  --text-dim: #aab6ca;
-  --text-muted: #7e8ca6;
+  /* Text — warm parchment */
+  --text: #f8f1eb;
+  --text-dim: #c9bcca;
+  --text-muted: #9c8fa6;
 
-  /* Accents */
-  --violet: #8b5cf6;
-  --violet-bright: #a78bfa;
-  --cyan: #22d3ee;
-  --violet-soft: rgba(139, 92, 246, 0.14);
-  --cyan-soft: rgba(34, 211, 238, 0.1);
+  /* Accents — coral leads actions, lilac supports, peach warms highlights */
+  --coral: #ff6b81;
+  --coral-soft: rgba(255, 107, 129, 0.14);
+  --lilac: #c4a1ff;
+  --lilac-soft: rgba(196, 161, 255, 0.12);
+  --peach: #ffc6a8;
 
   /* Lines */
-  --border: rgba(170, 182, 202, 0.14);
-  --border-strong: rgba(170, 182, 202, 0.26);
+  --border: rgba(201, 188, 202, 0.14);
+  --border-strong: rgba(201, 188, 202, 0.26);
 
   /* Gradients */
   --gradient-accent: linear-gradient(
     100deg,
-    #c4b5fd 0%,
-    #8b5cf6 48%,
-    #22d3ee 100%
+    #ffc6a8 0%,
+    #ff6b81 46%,
+    #c4a1ff 100%
   );
   --gradient-card: linear-gradient(
     180deg,
-    rgba(30, 42, 66, 0.9) 0%,
-    rgba(17, 24, 39, 0.92) 100%
+    rgba(46, 36, 58, 0.95) 0%,
+    rgba(35, 27, 46, 0.97) 100%
   );
 
   /* Type */
@@ -74,8 +74,8 @@
   --radius-xl: 30px;
 
   /* Effects */
-  --shadow-sm: 0 8px 24px -16px rgba(2, 6, 23, 0.8);
-  --shadow-lg: 0 30px 70px -34px rgba(2, 6, 23, 0.95);
+  --shadow-sm: 0 8px 24px -16px rgba(8, 4, 12, 0.85);
+  --shadow-lg: 0 30px 70px -34px rgba(8, 4, 12, 0.95);
 
   /* Motion */
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -133,13 +133,18 @@ body::before {
   background:
     radial-gradient(
       55rem 40rem at 8% -12%,
-      rgba(139, 92, 246, 0.16),
+      rgba(255, 107, 129, 0.13),
       transparent 62%
     ),
     radial-gradient(
       48rem 34rem at 96% 4%,
-      rgba(34, 211, 238, 0.08),
+      rgba(196, 161, 255, 0.1),
       transparent 60%
+    ),
+    radial-gradient(
+      44rem 32rem at 58% 108%,
+      rgba(255, 198, 168, 0.045),
+      transparent 70%
     );
 }
 
@@ -191,12 +196,12 @@ button {
 }
 
 ::selection {
-  background: rgba(139, 92, 246, 0.4);
-  color: #fff;
+  background: rgba(255, 107, 129, 0.42);
+  color: #1b1024;
 }
 
 :focus-visible {
-  outline: 2px solid var(--cyan);
+  outline: 2px solid var(--coral);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -241,14 +246,14 @@ button {
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--violet-bright);
+  color: var(--coral);
 }
 
 .eyebrow::before {
   content: "";
   width: 1.6rem;
   height: 1px;
-  background: linear-gradient(90deg, var(--violet), transparent);
+  background: linear-gradient(90deg, var(--coral), transparent);
 }
 
 .section-title {
@@ -307,19 +312,19 @@ button {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-  color: #fff;
+  background: linear-gradient(135deg, #ff8296 0%, #ff5f77 100%);
+  color: #1b1024;
   box-shadow:
-    0 16px 34px -18px rgba(139, 92, 246, 0.95),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    0 16px 34px -18px rgba(255, 107, 129, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .btn-primary:hover,
 .btn-primary:focus-visible {
   transform: translateY(-2px);
   box-shadow:
-    0 22px 44px -18px rgba(139, 92, 246, 1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+    0 22px 44px -18px rgba(255, 107, 129, 0.95),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42);
 }
 
 .btn-primary:active {
@@ -327,15 +332,15 @@ button {
 }
 
 .btn-ghost {
-  background: rgba(255, 255, 255, 0.035);
+  background: rgba(248, 241, 235, 0.035);
   border-color: var(--border-strong);
   color: var(--text);
 }
 
 .btn-ghost:hover,
 .btn-ghost:focus-visible {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(139, 92, 246, 0.55);
+  background: rgba(248, 241, 235, 0.07);
+  border-color: rgba(255, 107, 129, 0.55);
   transform: translateY(-2px);
 }
 
@@ -368,7 +373,7 @@ button {
   padding: 0.3rem 0.62rem;
   border: 1px solid var(--border);
   border-radius: 7px;
-  background: rgba(255, 255, 255, 0.032);
+  background: rgba(248, 241, 235, 0.04);
   font-family: var(--font-sans);
   font-size: 0.76rem;
   font-weight: 500;
@@ -383,13 +388,27 @@ button {
 
 .chip:hover {
   color: var(--text);
-  border-color: rgba(139, 92, 246, 0.45);
-  background: var(--violet-soft);
+  border-color: rgba(255, 107, 129, 0.45);
+  background: var(--coral-soft);
 }
 
 /* ==========================================================================
    7. Accessibility helpers
    ========================================================================== */
+
+/* Full text for screen readers while the visual layer animates. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
 
 .skip-link {
   position: fixed;
@@ -398,8 +417,8 @@ button {
   z-index: 200;
   padding: 0.6rem 1rem;
   border-radius: var(--radius-xs);
-  background: var(--violet);
-  color: #fff;
+  background: var(--coral);
+  color: #1b1024;
   font-size: 0.85rem;
   font-weight: 600;
   transform: translateY(-160%);
@@ -421,17 +440,17 @@ button {
   }
 
   ::-webkit-scrollbar-track {
-    background: #0b1020;
+    background: #15111f;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #273449;
-    border: 2px solid #0b1020;
+    background: #3b2e4a;
+    border: 2px solid #15111f;
     border-radius: 999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #35455f;
+    background: #4a3a5c;
   }
 }
 

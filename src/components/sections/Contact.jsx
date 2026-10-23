@@ -63,12 +63,8 @@ export default function Contact() {
               {contact.email}
             </a>
 
-            <ul
-              className={styles.socials}
-              data-reveal
-              style={{ animationDelay: "410ms" }}
-            >
-              <li>
+            <ul className={styles.socials}>
+              <li data-reveal style={{ animationDelay: "410ms" }}>
                 <a
                   href={contact.github}
                   target="_blank"
@@ -79,7 +75,7 @@ export default function Contact() {
                   GitHub
                 </a>
               </li>
-              <li>
+              <li data-reveal style={{ animationDelay: "500ms" }}>
                 <a
                   href={contact.linkedin}
                   target="_blank"

@@ -2,12 +2,13 @@ import { useEffect, useRef } from "react";
 
 /**
  * Writes a very small pointer offset onto the returned element as
- * `--tilt-x` / `--tilt-y` custom properties.
+ * `--tilt-x` / `--tilt-y` custom properties, plus the pointer position as
+ * `--spot-x` / `--spot-y` percentages for the hero's signature light.
  *
  * Only active for fine pointers without reduced-motion, so touch devices and
  * motion-sensitive visitors get a completely static layout.
  *
- * @param {number} strength - maximum offset in pixels.
+ * @param {number} strength - maximum tilt offset in pixels.
  */
 export default function usePointerTilt(strength = 7) {
   const ref = useRef(null);
@@ -23,11 +24,17 @@ export default function usePointerTilt(strength = 7) {
     let frame = 0;
     let nextX = 0;
     let nextY = 0;
+    let spotX = null;
+    let spotY = null;
 
     const apply = () => {
       frame = 0;
       el.style.setProperty("--tilt-x", `${nextX.toFixed(2)}px`);
       el.style.setProperty("--tilt-y", `${nextY.toFixed(2)}px`);
+      if (spotX !== null && spotY !== null) {
+        el.style.setProperty("--spot-x", `${spotX.toFixed(2)}%`);
+        el.style.setProperty("--spot-y", `${spotY.toFixed(2)}%`);
+      }
     };
 
     const schedule = () => {
@@ -40,6 +47,8 @@ export default function usePointerTilt(strength = 7) {
       const y = (event.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
       nextX = Math.max(-1, Math.min(1, x)) * strength;
       nextY = Math.max(-1, Math.min(1, y)) * strength * 0.7;
+      spotX = Math.max(0, Math.min(100, ((event.clientX - rect.left) / rect.width) * 100));
+      spotY = Math.max(0, Math.min(100, ((event.clientY - rect.top) / rect.height) * 100));
       schedule();
     };
 
@@ -58,6 +67,8 @@ export default function usePointerTilt(strength = 7) {
       el.removeEventListener("pointerleave", reset);
       el.style.removeProperty("--tilt-x");
       el.style.removeProperty("--tilt-y");
+      el.style.removeProperty("--spot-x");
+      el.style.removeProperty("--spot-y");
     };
   }, [strength]);
 

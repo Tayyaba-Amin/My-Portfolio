@@ -19,7 +19,7 @@
 }
 
 .item:hover {
-  border-top-color: rgba(139, 92, 246, 0.6);
+  border-top-color: rgba(255, 107, 129, 0.6);
 }
 
 .num {
@@ -27,7 +27,7 @@
   font-size: 0.66rem;
   font-weight: 600;
   letter-spacing: 0.14em;
-  color: var(--violet-bright);
+  color: var(--coral);
 }
 
 .title {

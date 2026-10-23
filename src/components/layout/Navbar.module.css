@@ -21,9 +21,9 @@
 
 .scrolled::before,
 .nav[data-open]::before {
-  background: rgba(11, 16, 32, 0.85);
+  background: rgba(21, 17, 31, 0.88);
   border-bottom-color: var(--border);
-  box-shadow: 0 16px 36px -28px rgba(2, 6, 23, 0.95);
+  box-shadow: 0 16px 36px -28px rgba(8, 4, 12, 0.95);
   backdrop-filter: blur(16px) saturate(140%);
   -webkit-backdrop-filter: blur(16px) saturate(140%);
 }
@@ -37,8 +37,8 @@
   left: 0;
   height: 2px;
   pointer-events: none;
-  background: linear-gradient(90deg, var(--violet), var(--cyan));
-  opacity: 0.85;
+  background: linear-gradient(90deg, var(--coral), var(--lilac));
+  opacity: 0.9;
   transform: scaleX(var(--scroll-progress, 0));
   transform-origin: 0 50%;
 }
@@ -66,15 +66,15 @@
   width: 2.15rem;
   height: 2.15rem;
   border-radius: 10px;
-  background: linear-gradient(140deg, #a78bfa 0%, #7c3aed 70%);
+  background: linear-gradient(140deg, #ff9dab 0%, #ff5f77 72%);
   box-shadow:
-    0 8px 20px -8px rgba(139, 92, 246, 0.9),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    0 8px 20px -8px rgba(255, 107, 129, 0.9),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
   font-family: var(--font-display);
   font-size: 0.74rem;
   font-weight: 700;
   letter-spacing: 0.02em;
-  color: #fff;
+  color: #1b1024;
 }
 
 .brandText {
@@ -132,7 +132,7 @@
   width: 1.1rem;
   height: 1px;
   border-radius: 1px;
-  background: var(--violet-bright);
+  background: var(--lilac);
   opacity: 0;
   transform: translateX(-50%) scaleX(0.4);
   transition:
@@ -149,13 +149,21 @@
 .link:hover,
 .link:focus-visible {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(248, 241, 235, 0.05);
 }
 
 .linkActive {
   color: var(--text);
-  background: var(--violet-soft);
-  box-shadow: inset 0 0 0 1px rgba(139, 92, 246, 0.28);
+  background: var(--coral-soft);
+  box-shadow: inset 0 0 0 1px rgba(255, 107, 129, 0.28);
+}
+
+/* The current section keeps a coral underline at all times. */
+.linkActive::after {
+  width: 1.5rem;
+  background: var(--coral);
+  opacity: 1;
+  transform: translateX(-50%) scaleX(1);
 }
 
 .tail {
@@ -177,7 +185,7 @@
   height: 2.5rem;
   border: 1px solid var(--border-strong);
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(248, 241, 235, 0.03);
   color: var(--text);
   transition:
     border-color var(--transition),
@@ -185,8 +193,8 @@
 }
 
 .menuBtn:hover {
-  border-color: rgba(139, 92, 246, 0.55);
-  background: var(--violet-soft);
+  border-color: rgba(255, 107, 129, 0.55);
+  background: var(--coral-soft);
 }
 
 /* Re-runs whenever the open and close icons swap. */
@@ -212,9 +220,35 @@
   inset: var(--nav-height) 0 0;
   z-index: 99;
   overflow-y: auto;
-  background: #0b1020;
+  background: var(--bg);
   border-top: 1px solid var(--border);
   animation: panel-in 0.24s var(--ease) both;
+}
+
+/* Closing mirrors the entrance instead of snapping shut. */
+.panel[data-closing] {
+  pointer-events: none;
+  animation: panel-out 200ms var(--ease) forwards;
+}
+
+.panel[data-closing] .panelLink,
+.panel[data-closing] .panelCta {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+@keyframes panel-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
 }
 
 .panelInner {

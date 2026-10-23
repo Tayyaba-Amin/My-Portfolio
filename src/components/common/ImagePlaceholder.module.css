@@ -23,8 +23,8 @@
   background:
     linear-gradient(
       145deg,
-      rgba(139, 92, 246, 0.1),
-      rgba(17, 24, 39, 0.9) 55%
+      rgba(255, 107, 129, 0.1),
+      rgba(33, 25, 43, 0.9) 55%
     ),
     var(--surface);
 }
