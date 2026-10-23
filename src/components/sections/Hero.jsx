@@ -1,5 +1,7 @@
 import { personal, hero } from "../../config/siteData";
 import ImagePlaceholder from "../common/ImagePlaceholder";
+import SplitText from "../common/SplitText";
+import usePointerTilt from "../../hooks/usePointerTilt";
 import { ArrowIcon, EmailIcon, LocationIcon } from "../common/icons";
 import styles from "./Hero.module.css";
 
@@ -12,8 +14,15 @@ const [taglineLead, taglineRest] = hero.tagline
   .map((part) => part.trim());
 
 export default function Hero() {
+  const sectionRef = usePointerTilt(7);
+
   return (
-    <section id="hero" className={styles.hero} aria-labelledby="hero-heading">
+    <section
+      ref={sectionRef}
+      id="hero"
+      className={styles.hero}
+      aria-labelledby="hero-heading"
+    >
       <div className={styles.backdrop} aria-hidden="true">
         <div className={styles.grid} />
         <div className={styles.glowViolet} />
@@ -22,40 +31,58 @@ export default function Hero() {
 
       <div className={`container ${styles.inner}`}>
         <div className={styles.copy}>
-          <p className={styles.badge} style={{ animationDelay: "0ms" }}>
+          <p className={styles.badge}>
             <LocationIcon />
             {personal.location}
           </p>
 
-          <h1
-            id="hero-heading"
-            className={styles.title}
-            style={{ animationDelay: "90ms" }}
-          >
-            <span className={styles.greeting}>{hero.greeting}</span>
+          <h1 id="hero-heading" className={styles.title}>
+            <SplitText
+              as="span"
+              className={styles.greeting}
+              text={hero.greeting}
+              auto
+              delay={80}
+              stagger={70}
+            />
             <span className={styles.name}>
-              {givenName}{" "}
-              <span className="text-gradient">{surname}</span>
+              <span className="split-word">
+                <span
+                  className="split-word-inner split-word-inner--auto"
+                  style={{ animationDelay: "150ms" }}
+                >
+                  {givenName}{" "}
+                </span>
+              </span>
+              <span className="split-word">
+                <span
+                  className="split-word-inner split-word-inner--auto"
+                  style={{ animationDelay: "220ms" }}
+                >
+                  <span className="text-gradient">{surname}</span>
+                </span>
+              </span>
             </span>
           </h1>
 
-          <p className={styles.tagline} style={{ animationDelay: "170ms" }}>
-            <span>{taglineLead}</span>
+          <p className={styles.tagline}>
+            <span className={styles.tagSegment}>{taglineLead}</span>
             {taglineRest && (
               <>
-                <span className={styles.pipe} aria-hidden="true">
+                <span
+                  className={`${styles.tagSegment} ${styles.pipe}`}
+                  aria-hidden="true"
+                >
                   |
                 </span>
-                <span>{taglineRest}</span>
+                <span className={styles.tagSegment}>{taglineRest}</span>
               </>
             )}
           </p>
 
-          <p className={styles.intro} style={{ animationDelay: "250ms" }}>
-            {hero.intro}
-          </p>
+          <p className={styles.intro}>{hero.intro}</p>
 
-          <div className={styles.actions} style={{ animationDelay: "330ms" }}>
+          <div className={styles.actions}>
             <a href="#projects" className="btn btn-primary">
               View Projects
               <ArrowIcon />
@@ -70,15 +97,17 @@ export default function Hero() {
         <div className={styles.portraitColumn}>
           <div className={styles.portrait}>
             <div className={styles.portraitGlow} aria-hidden="true" />
-            <div className={styles.frame}>
-              <ImagePlaceholder
-                src={personal.portraitImage}
-                alt={`Portrait of ${personal.name}`}
-                fallback={personal.name}
-                aspect="4 / 5"
-                priority
-                className={styles.portraitImg}
-              />
+            <div className={styles.portraitTilt}>
+              <div className={styles.frame}>
+                <ImagePlaceholder
+                  src={personal.portraitImage}
+                  alt={`Portrait of ${personal.name}`}
+                  fallback={personal.name}
+                  aspect="4 / 5"
+                  priority
+                  className={styles.portraitImg}
+                />
+              </div>
             </div>
 
             <div className={styles.infoCard}>

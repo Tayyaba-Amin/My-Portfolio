@@ -1,4 +1,5 @@
 import { contact, personal } from "../../config/siteData";
+import SplitText from "../common/SplitText";
 import {
   ArrowIcon,
   EmailIcon,
@@ -16,21 +17,24 @@ export default function Contact() {
       aria-labelledby="contact-heading"
     >
       <div className="container">
-        <div className={styles.card} data-reveal>
+        <div className={styles.card} data-reveal="card">
           <div className={styles.inner}>
-            <p className={`eyebrow ${styles.eyebrow}`}>Contact</p>
-            <h2
+            <p className={`eyebrow ${styles.eyebrow}`} data-reveal>
+              Contact
+            </p>
+            <SplitText
+              as="h2"
               id="contact-heading"
               className={styles.headline}
-              data-reveal
-              style={{ animationDelay: "70ms" }}
-            >
-              Have an idea worth building?
-            </h2>
+              data-reveal="words"
+              text="Have an idea worth building?"
+              delay={80}
+              stagger={70}
+            />
             <p
               className={styles.invitation}
               data-reveal
-              style={{ animationDelay: "150ms" }}
+              style={{ animationDelay: "180ms" }}
             >
               {contact.invitation}
             </p>
@@ -38,7 +42,7 @@ export default function Contact() {
             <div
               className={styles.actions}
               data-reveal
-              style={{ animationDelay: "230ms" }}
+              style={{ animationDelay: "260ms" }}
             >
               <a
                 href={`mailto:${contact.email}`}
@@ -54,7 +58,7 @@ export default function Contact() {
               href={`mailto:${contact.email}`}
               className={styles.emailText}
               data-reveal
-              style={{ animationDelay: "300ms" }}
+              style={{ animationDelay: "330ms" }}
             >
               {contact.email}
             </a>
@@ -62,7 +66,7 @@ export default function Contact() {
             <ul
               className={styles.socials}
               data-reveal
-              style={{ animationDelay: "380ms" }}
+              style={{ animationDelay: "410ms" }}
             >
               <li>
                 <a
@@ -91,7 +95,7 @@ export default function Contact() {
             <p
               className={styles.location}
               data-reveal
-              style={{ animationDelay: "450ms" }}
+              style={{ animationDelay: "480ms" }}
             >
               <LocationIcon />
               {personal.location}

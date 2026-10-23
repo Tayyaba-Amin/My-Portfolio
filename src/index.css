@@ -76,7 +76,15 @@
   /* Effects */
   --shadow-sm: 0 8px 24px -16px rgba(2, 6, 23, 0.8);
   --shadow-lg: 0 30px 70px -34px rgba(2, 6, 23, 0.95);
+
+  /* Motion */
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-micro: 180ms;
+  --dur-hover: 300ms;
+  --dur-reveal: 700ms;
+  --dur-hero: 900ms;
+  --stagger: 70ms;
   --transition: 0.25s var(--ease);
   --transition-slow: 0.6s var(--ease);
 }
@@ -315,7 +323,7 @@ button {
 }
 
 .btn-primary:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.985);
 }
 
 .btn-ghost {
@@ -329,6 +337,10 @@ button {
   background: rgba(255, 255, 255, 0.07);
   border-color: rgba(139, 92, 246, 0.55);
   transform: translateY(-2px);
+}
+
+.btn-ghost:active {
+  transform: translateY(0) scale(0.985);
 }
 
 .btn-sm {
@@ -436,8 +448,10 @@ button {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
     scroll-behavior: auto !important;
   }
 }

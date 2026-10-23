@@ -11,6 +11,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const panelRef = useRef(null);
   const menuBtnRef = useRef(null);
+  const headerRef = useRef(null);
 
   const close = () => setOpen(false);
 
@@ -18,6 +19,15 @@ export default function Navbar() {
   useEffect(() => {
     const update = () => {
       setScrolled(window.scrollY > 12);
+
+      // Thin progress line under the header, written without re-rendering.
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - window.innerHeight;
+      const progress = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+      headerRef.current?.style.setProperty(
+        "--scroll-progress",
+        progress.toFixed(4)
+      );
 
       const probe = window.scrollY + window.innerHeight * 0.35;
       let current = SECTION_IDS[0];
@@ -65,6 +75,7 @@ export default function Navbar() {
 
   return (
     <header
+      ref={headerRef}
       className={`${styles.nav} ${scrolled ? styles.scrolled : ""}`}
       data-open={open || undefined}
     >
@@ -123,14 +134,21 @@ export default function Navbar() {
       {open && (
         <div id="mobile-menu" ref={panelRef} className={styles.panel}>
           <div className={`container ${styles.panelInner}`}>
-            {navLinks.map(({ label, href }) => (
-              <a key={href} href={href} className={styles.panelLink} onClick={close}>
+            {navLinks.map(({ label, href }, i) => (
+              <a
+                key={href}
+                href={href}
+                className={styles.panelLink}
+                style={{ animationDelay: `${90 + i * 45}ms` }}
+                onClick={close}
+              >
                 {label}
               </a>
             ))}
             <a
               href="#contact"
               className={`btn btn-primary ${styles.panelCta}`}
+              style={{ animationDelay: `${90 + navLinks.length * 45}ms` }}
               onClick={close}
             >
               Contact Me

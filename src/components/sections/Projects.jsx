@@ -1,5 +1,6 @@
 import { projects } from "../../config/siteData";
 import ProjectCard from "../common/ProjectCard";
+import SplitText from "../common/SplitText";
 import styles from "./Projects.module.css";
 
 export default function Projects() {
@@ -10,12 +11,24 @@ export default function Projects() {
       aria-labelledby="projects-heading"
     >
       <div className="container">
-        <header className={styles.header} data-reveal>
-          <p className="eyebrow">Selected work</p>
-          <h2 id="projects-heading" className="section-title">
-            Projects I&apos;ve built
-          </h2>
-          <p className={`section-lead ${styles.lead}`}>
+        <header className={styles.header}>
+          <p className="eyebrow" data-reveal>
+            Selected work
+          </p>
+          <SplitText
+            as="h2"
+            id="projects-heading"
+            className="section-title"
+            data-reveal="words"
+            text="Projects I've built"
+            delay={60}
+            stagger={55}
+          />
+          <p
+            className={`section-lead ${styles.lead}`}
+            data-reveal
+            style={{ animationDelay: "210ms" }}
+          >
             Six applications I&apos;ve built — from AI-powered tools to
             full-stack marketplaces. Each is a real project, linked to its
             repository.

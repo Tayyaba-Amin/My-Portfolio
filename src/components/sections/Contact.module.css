@@ -130,13 +130,15 @@ a.emailBtn {
   transition:
     color var(--transition),
     border-color var(--transition),
-    background var(--transition);
+    background var(--transition),
+    transform var(--transition);
 }
 
 .social svg {
   width: 0.9rem;
   height: 0.9rem;
   flex-shrink: 0;
+  transition: transform var(--transition);
 }
 
 .social:hover,
@@ -144,6 +146,12 @@ a.emailBtn {
   color: var(--text);
   border-color: rgba(139, 92, 246, 0.55);
   background: var(--violet-soft);
+  transform: translateY(-2px);
+}
+
+.social:hover svg,
+.social:focus-visible svg {
+  transform: scale(1.08);
 }
 
 .location {

@@ -19,7 +19,7 @@ export default function Footer() {
   return (
     <footer className={styles.footer}>
       <div className={`container ${styles.top}`}>
-        <div className={styles.brand}>
+        <div className={styles.brand} data-reveal>
           <span className={styles.mark} aria-hidden="true">
             TA
           </span>
@@ -31,7 +31,11 @@ export default function Footer() {
           </span>
         </div>
 
-        <nav aria-label="Social links">
+        <nav
+          aria-label="Social links"
+          data-reveal
+          style={{ animationDelay: "90ms" }}
+        >
           <ul className={styles.socials}>
             {socialLinks.map(({ label, href, Icon, external }) => (
               <li key={label}>
@@ -52,7 +56,11 @@ export default function Footer() {
         </nav>
       </div>
 
-      <div className={`container ${styles.bottom}`}>
+      <div
+        className={`container ${styles.bottom}`}
+        data-reveal
+        style={{ animationDelay: "160ms" }}
+      >
         <p className={styles.copy}>
           © {year} {personal.name}
         </p>

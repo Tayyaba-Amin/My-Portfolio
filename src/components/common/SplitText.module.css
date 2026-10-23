@@ -1,0 +1,4 @@
+/* SplitText only needs the inline-mask box; the look is inherited. */
+.root {
+  display: block;
+}

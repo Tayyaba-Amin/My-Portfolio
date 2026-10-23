@@ -80,6 +80,12 @@
 .social svg {
   width: 1rem;
   height: 1rem;
+  transition: transform var(--transition);
+}
+
+.social:hover svg,
+.social:focus-visible svg {
+  transform: scale(1.08);
 }
 
 .social:hover,
@@ -125,6 +131,12 @@
 .topLink span {
   font-size: 0.9rem;
   line-height: 1;
+  transition: transform var(--transition);
+}
+
+.topLink:hover span,
+.topLink:focus-visible span {
+  transform: translateY(-2px);
 }
 
 @media (max-width: 560px) {

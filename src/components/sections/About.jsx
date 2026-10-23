@@ -1,4 +1,5 @@
 import { personal, about } from "../../config/siteData";
+import SplitText from "../common/SplitText";
 import styles from "./About.module.css";
 
 export default function About() {
@@ -9,17 +10,25 @@ export default function About() {
       aria-labelledby="about-heading"
     >
       <div className={`container ${styles.inner}`}>
-        <header className={styles.head} data-reveal>
-          <p className="eyebrow">About me</p>
-          <h2 id="about-heading" className="section-title">
-            {about.headline}
-          </h2>
+        <header className={styles.head}>
+          <p className="eyebrow" data-reveal>
+            About me
+          </p>
+          <SplitText
+            as="h2"
+            id="about-heading"
+            className="section-title"
+            data-reveal="words"
+            text={about.headline}
+            delay={60}
+            stagger={55}
+          />
         </header>
 
         <div
           className={styles.body}
           data-reveal
-          style={{ animationDelay: "90ms" }}
+          style={{ animationDelay: "150ms" }}
         >
           {personal.bio.map((para) => (
             <p key={para} className={styles.para}>
@@ -32,7 +41,7 @@ export default function About() {
           <p
             className={styles.focusLabel}
             data-reveal
-            style={{ animationDelay: "160ms" }}
+            style={{ animationDelay: "210ms" }}
           >
             Focus areas
           </p>
@@ -42,7 +51,7 @@ export default function About() {
                 key={item}
                 className={styles.focusItem}
                 data-reveal
-                style={{ animationDelay: `${220 + i * 70}ms` }}
+                style={{ animationDelay: `${260 + i * 60}ms` }}
               >
                 <span className={styles.dot} aria-hidden="true" />
                 {item}

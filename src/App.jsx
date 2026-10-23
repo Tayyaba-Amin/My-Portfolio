@@ -37,7 +37,9 @@ function App() {
           }
         });
       },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+      /* No bottom inset: content pinned to the end of the page (the footer
+         row) must still reveal when the page is scrolled all the way down. */
+      { threshold: 0.08 }
     );
 
     nodes.forEach((node) => observer.observe(node));

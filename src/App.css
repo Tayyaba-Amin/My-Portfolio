@@ -1,4 +1,4 @@
-/* App-level layout and scroll-reveal choreography. */
+/* App-level layout and the global motion system. */
 
 #root {
   display: flex;
@@ -18,11 +18,12 @@ section[id] {
 }
 
 /* --------------------------------------------------------------------------
-   Scroll reveal — the hidden state only applies when JavaScript is running,
-   so content always stays visible if scripts fail to load.
+   Scroll reveal
+   The hidden state only applies when JavaScript is running, so content always
+   stays visible if scripts fail to load.
 
-   A CSS animation (not a transition) is used on purpose: once it finishes it
-   stops applying, so component hover transitions keep their own timing.
+   CSS animations (not transitions) are used on purpose: once they finish they
+   stop applying, so component hover transitions keep their own timing.
    -------------------------------------------------------------------------- */
 
 html.js [data-reveal] {
@@ -31,13 +32,21 @@ html.js [data-reveal] {
 
 html.js [data-reveal].is-visible {
   opacity: 1;
-  animation: reveal-up 0.7s var(--ease) backwards;
+}
+
+html.js [data-reveal]:not([data-reveal="words"]):not([data-reveal="card"]).is-visible {
+  animation: reveal-up var(--dur-reveal) var(--ease-out) backwards;
+}
+
+/* The contact card gets one slightly richer entrance than body copy. */
+html.js [data-reveal="card"].is-visible {
+  animation: reveal-card 900ms var(--ease-out) backwards;
 }
 
 @keyframes reveal-up {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(22px);
   }
   to {
     opacity: 1;
@@ -45,8 +54,69 @@ html.js [data-reveal].is-visible {
   }
 }
 
+@keyframes reveal-card {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Masked word reveal
+   Words sit inside clipped boxes and rise into place. The trailing space lives
+   inside each mask so wrapping stays natural.
+   -------------------------------------------------------------------------- */
+
+.split-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.18em;
+  margin-bottom: -0.18em;
+}
+
+.split-word-inner {
+  display: inline-block;
+  white-space: pre;
+}
+
+/* Hero heading: plays once on load, no observer needed. */
+.split-word-inner--auto {
+  animation: word-rise 850ms var(--ease-out) both;
+}
+
+html.js [data-reveal="words"]:not(.is-visible) .split-word-inner {
+  opacity: 0;
+  transform: translateY(125%);
+}
+
+html.js [data-reveal="words"].is-visible .split-word-inner {
+  animation: word-rise var(--dur-reveal) var(--ease-out) backwards;
+}
+
+@keyframes word-rise {
+  from {
+    opacity: 0;
+    transform: translateY(125%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion: every reveal resolves instantly and nothing is left hidden.
+   -------------------------------------------------------------------------- */
+
 @media (prefers-reduced-motion: reduce) {
-  html.js [data-reveal] {
+  html.js [data-reveal],
+  html.js [data-reveal="words"]:not(.is-visible) .split-word-inner,
+  .split-word-inner--auto {
     opacity: 1 !important;
     animation: none !important;
     transform: none !important;

@@ -23,8 +23,24 @@
 .nav[data-open]::before {
   background: rgba(11, 16, 32, 0.85);
   border-bottom-color: var(--border);
+  box-shadow: 0 16px 36px -28px rgba(2, 6, 23, 0.95);
   backdrop-filter: blur(16px) saturate(140%);
   -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+/* Reading progress, scaled directly from a custom property. */
+.nav::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(90deg, var(--violet), var(--cyan));
+  opacity: 0.85;
+  transform: scaleX(var(--scroll-progress, 0));
+  transform-origin: 0 50%;
 }
 
 .row {
@@ -107,6 +123,29 @@
     box-shadow var(--transition);
 }
 
+/* A quiet underline that grows from the centre on hover. */
+.link::after {
+  content: "";
+  position: absolute;
+  bottom: 0.22rem;
+  left: 50%;
+  width: 1.1rem;
+  height: 1px;
+  border-radius: 1px;
+  background: var(--violet-bright);
+  opacity: 0;
+  transform: translateX(-50%) scaleX(0.4);
+  transition:
+    opacity var(--transition),
+    transform var(--transition);
+}
+
+.link:hover::after,
+.link:focus-visible::after {
+  opacity: 0.9;
+  transform: translateX(-50%) scaleX(1);
+}
+
 .link:hover,
 .link:focus-visible {
   color: var(--text);
@@ -150,6 +189,22 @@
   background: var(--violet-soft);
 }
 
+/* Re-runs whenever the open and close icons swap. */
+.menuBtn svg {
+  animation: icon-in 320ms var(--ease-out) both;
+}
+
+@keyframes icon-in {
+  from {
+    opacity: 0;
+    transform: rotate(-35deg) scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* ---- Mobile panel ---- */
 
 .panel {
@@ -175,6 +230,7 @@
   font-size: 1.15rem;
   font-weight: 500;
   color: var(--text-dim);
+  animation: panel-link-in 450ms var(--ease-out) backwards;
   transition: color var(--transition), padding-left var(--transition);
 }
 
@@ -187,6 +243,18 @@
 .panelCta {
   margin-top: 1.5rem;
   width: 100%;
+  animation: panel-link-in 450ms var(--ease-out) backwards;
+}
+
+@keyframes panel-link-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes panel-in {

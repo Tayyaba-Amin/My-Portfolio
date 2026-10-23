@@ -1,4 +1,5 @@
 import { skills } from "../../config/siteData";
+import SplitText from "../common/SplitText";
 import styles from "./Skills.module.css";
 
 const groups = [
@@ -18,12 +19,24 @@ export default function Skills() {
       aria-labelledby="skills-heading"
     >
       <div className="container">
-        <header className={styles.head} data-reveal>
-          <p className="eyebrow">Toolkit</p>
-          <h2 id="skills-heading" className="section-title">
-            Skills &amp; tools
-          </h2>
-          <p className="section-lead">
+        <header className={styles.head}>
+          <p className="eyebrow" data-reveal>
+            Toolkit
+          </p>
+          <SplitText
+            as="h2"
+            id="skills-heading"
+            className="section-title"
+            data-reveal="words"
+            text="Skills & tools"
+            delay={60}
+            stagger={55}
+          />
+          <p
+            className="section-lead"
+            data-reveal
+            style={{ animationDelay: "210ms" }}
+          >
             The technologies behind my projects, plus what I&apos;m learning
             next.
           </p>
