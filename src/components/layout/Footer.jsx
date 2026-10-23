@@ -2,69 +2,64 @@ import { personal, contact } from "../../config/siteData";
 import { GithubIcon, LinkedInIcon, EmailIcon } from "../common/icons";
 import styles from "./Footer.module.css";
 
-function isConfigured(value) {
-  return Boolean(value && !value.includes("["));
-}
-
 export default function Footer() {
   const year = new Date().getFullYear();
 
   const socialLinks = [
-    {
-      label: "GitHub",
-      href: contact.github,
-      icon: GithubIcon,
-      configured: isConfigured(contact.github),
-    },
-    {
-      label: "LinkedIn",
-      href: contact.linkedin,
-      icon: LinkedInIcon,
-      configured: isConfigured(contact.linkedin),
-    },
+    { label: "GitHub", href: contact.github, Icon: GithubIcon, external: true },
+    { label: "LinkedIn", href: contact.linkedin, Icon: LinkedInIcon, external: true },
     {
       label: "Email",
-      href: contact.email ? `mailto:${contact.email}` : "",
-      icon: EmailIcon,
-      configured: isConfigured(contact.email),
+      href: `mailto:${contact.email}`,
+      Icon: EmailIcon,
+      external: false,
     },
   ];
 
   return (
-    <footer className={`theme-dark ${styles.footer}`}>
-      <div className={styles.inner}>
+    <footer className={styles.footer}>
+      <div className={`container ${styles.top}`}>
         <div className={styles.brand}>
-          <span className={styles.tagline}>
-            Building and learning, one line at a time.
+          <span className={styles.mark} aria-hidden="true">
+            TA
+          </span>
+          <span className={styles.identity}>
+            <span className={styles.name}>{personal.name}</span>
+            <span className={styles.tagline}>
+              Building and learning, one line at a time.
+            </span>
           </span>
         </div>
 
-        <nav className={styles.nav} aria-label="Social">
-          <ul className={styles.links}>
-            {socialLinks.map((link) =>
-              link.configured ? (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.iconLink}
-                    aria-label={link.label}
-                    title={link.label}
-                  >
-                    <link.icon />
-                  </a>
-                </li>
-              ) : null
-            )}
+        <nav aria-label="Social links">
+          <ul className={styles.socials}>
+            {socialLinks.map(({ label, href, Icon, external }) => (
+              <li key={label}>
+                <a
+                  href={href}
+                  className={styles.social}
+                  aria-label={label}
+                  title={label}
+                  {...(external
+                    ? { target: "_blank", rel: "noopener noreferrer" }
+                    : {})}
+                >
+                  <Icon />
+                </a>
+              </li>
+            ))}
           </ul>
         </nav>
+      </div>
 
-        <div className={styles.copy}>
-          <span>© {year}</span>
-          <span className={styles.divider}>/ </span>
-          <span>{personal.name}</span>
-        </div>
+      <div className={`container ${styles.bottom}`}>
+        <p className={styles.copy}>
+          © {year} {personal.name}
+        </p>
+        <a href="#hero" className={styles.topLink}>
+          Back to top
+          <span aria-hidden="true">↑</span>
+        </a>
       </div>
     </footer>
   );

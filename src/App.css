@@ -1,31 +1,54 @@
-/* App-level styles: smooth anchor scrolling and main content spacing */
+/* App-level layout and scroll-reveal choreography. */
 
-html {
-  scroll-behavior: smooth;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: transparent;
+  color: var(--text);
 }
 
 main {
   flex: 1 0 auto;
 }
 
-/* Consistent section spacing — single source of truth */
-main > section {
-  padding-block: var(--space-2xl);
-}
-
-/* Hero uses base spacing for 100dvh centering */
-#hero {
-  padding-block: var(--space-lg);
-}
-
-
-/* Ensure each full-width section sits flush */
+/* Smooth anchor offset for the sticky header. */
 section[id] {
-  scroll-margin-top: 4.5rem;
+  scroll-margin-top: var(--nav-height);
+}
+
+/* --------------------------------------------------------------------------
+   Scroll reveal — the hidden state only applies when JavaScript is running,
+   so content always stays visible if scripts fail to load.
+
+   A CSS animation (not a transition) is used on purpose: once it finishes it
+   stops applying, so component hover transitions keep their own timing.
+   -------------------------------------------------------------------------- */
+
+html.js [data-reveal] {
+  opacity: 0;
+}
+
+html.js [data-reveal].is-visible {
+  opacity: 1;
+  animation: reveal-up 0.7s var(--ease) backwards;
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-reveal] {
+    opacity: 1 !important;
+    animation: none !important;
+    transform: none !important;
+  }
 }

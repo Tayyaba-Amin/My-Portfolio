@@ -1,168 +1,132 @@
-import { useEffect, useRef, useState } from "react";
 import ImagePlaceholder from "./ImagePlaceholder";
 import { GithubIcon, ExternalIcon, VideoIcon } from "./icons";
 import styles from "./ProjectCard.module.css";
 
+/** Parse a URL that may arrive wrapped in markdown-style [label](url). */
+function parseUrl(url) {
+  if (!url) return null;
+  const markdownMatch = url.match(/\[([^\]]+)\]\(([^)]+)\)/);
+  return markdownMatch ? markdownMatch[2] : url;
+}
+
 /**
- * Editorial project archive entry.
+ * Project gallery card: real screenshot, factual summary, actual stack.
  *
  * @param {object} props
  * @param {object} props.project - project data from siteData
- * @param {number} props.index   - zero-based index for numbering (01–06)
+ * @param {number} props.index   - zero-based index for the running number
  */
 export default function ProjectCard({ project, index }) {
   const {
     title,
-    description,
+    summary,
     tech,
     imagePath,
-    imagePlaceholder,
+    category,
+    builtFor,
     repoUrl,
     demoUrl,
     demoVideoUrl,
     note,
   } = project;
+
   const num = String(index + 1).padStart(2, "0");
-  const side = index % 2 === 0 ? "left" : "right";
-
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [showToggle, setShowToggle] = useState(false);
-  const descriptionRef = useRef(null);
-
-  // Parse demoUrl in case it contains markdown-style [url](url)
-  const parseUrl = (url) => {
-    if (!url) return null;
-    const markdownMatch = url.match(/\[([^\]]+)\]\(([^)]+)\)/);
-    return markdownMatch ? markdownMatch[2] : url;
-  };
-
-  const parsedDemoUrl = parseUrl(demoUrl);
-  const parsedDemoVideoUrl = parseUrl(demoVideoUrl);
-
-  const hasDemo = Boolean(parsedDemoUrl);
-  const hasVideo = Boolean(parsedDemoVideoUrl);
-  const hasRepo = Boolean(repoUrl);
-  const hasNote = Boolean(note && note.trim());
-
-  const checkOverflow = () => {
-    if (!descriptionRef.current) return;
-    const el = descriptionRef.current;
-    // Temporarily remove clamp to measure natural height
-    el.style.webkitLineClamp = "unset";
-    el.style.overflow = "visible";
-    const lineHeight = parseFloat(getComputedStyle(el).lineHeight);
-    const maxHeight = lineHeight * 2;
-    const hasOverflow = el.scrollHeight > maxHeight;
-    el.style.webkitLineClamp = "2";
-    el.style.overflow = "hidden";
-    setShowToggle(hasOverflow);
-  };
-
-  useEffect(() => {
-    checkOverflow();
-    window.addEventListener("resize", checkOverflow);
-    return () => window.removeEventListener("resize", checkOverflow);
-  }, [description]);
-
-  const handleToggle = () => {
-    setIsExpanded((prev) => !prev);
-  };
+  const liveUrl = parseUrl(demoUrl);
+  const videoUrl = parseUrl(demoVideoUrl);
 
   return (
-    <article className={styles.entry}>
-      <div className={styles.head}>
-        <span className="number" aria-hidden="true">
-          {num}
-        </span>
-        <span className={styles.badge}>{title} </span>
+    <article
+      className={styles.card}
+      data-reveal
+      style={{ animationDelay: `${(index % 2) * 90}ms` }}
+    >
+      <div className={styles.media}>
+        <ImagePlaceholder
+          src={imagePath}
+          alt={`${title} project screenshot`}
+          fallback={title}
+          aspect="16 / 10"
+          className={styles.image}
+        />
       </div>
 
-      <div className={`${styles.body} ${styles[side]}`}>
-        <div className={styles.media}>
-          <ImagePlaceholder
-            src={imagePath}
-            alt={altText(title)}
-            fallback={[imagePlaceholder]}
-            aspect="16 / 9"
-          />
+      <div className={styles.body}>
+        <div className={styles.metaRow}>
+          <span className={styles.category}>{category}</span>
+          <span className={styles.num} aria-hidden="true">
+            {num}
+          </span>
         </div>
 
-        <div className={styles.content}>
-          <h3 className={styles.title}>{title}</h3>
-          <div className={styles.descriptionWrapper}>
-            <p
-              ref={descriptionRef}
-              className={`${styles.description} ${isExpanded ? styles.expanded : styles.collapsed}`}
-            >
-              {description}
-            </p>
-            {showToggle && (
-              <button
-                type="button"
-                className={styles.expandButton}
-                onClick={handleToggle}
-                aria-expanded={isExpanded}
-                aria-controls={`${title}-description`}
-                id={`${title}-toggle`}
-              >
-                {isExpanded ? "Show less" : "Show more"}
-              </button>
-            )}
-          </div>
-          <p className="tech-list">
-            {tech.map((t) => (
-              <span key={t}>{t}</span>
-            ))}
+        <h3 className={styles.title}>{title}</h3>
+
+        {builtFor && (
+          <p className={styles.builtFor}>
+            <span className={styles.builtDot} aria-hidden="true" />
+            {builtFor}
           </p>
+        )}
 
-          {hasNote && (
-            <p className={styles.note}>{note}</p>
+        <p className={styles.summary}>{summary}</p>
+
+        <ul className={styles.tech} aria-label={`${title} technologies`}>
+          {tech.map((item) => (
+            <li key={item} className="chip">
+              {item}
+            </li>
+          ))}
+        </ul>
+
+        {note && <p className={styles.note}>{note}</p>}
+
+        <div className={styles.actions}>
+          {repoUrl && (
+            <a
+              href={repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.action}
+              aria-label={`${title} GitHub repository`}
+            >
+              <GithubIcon />
+              GitHub
+              <span className={styles.arrow} aria-hidden="true">
+                →
+              </span>
+            </a>
           )}
-
-          <div className={styles.links}>
-            {hasRepo && (
-              <a
-                href={repoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.link}
-                aria-label={`${title} GitHub repository`}
-              >
-                <GithubIcon />
-                <span>GitHub</span>
-              </a>
-            )}
-            {hasDemo && (
-              <a
-                href={parsedDemoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.link}
-                aria-label={`${title} live demo`}
-              >
-                <ExternalIcon />
-                <span>Live Demo</span>
-              </a>
-            )}
-            {hasVideo && (
-              <a
-                href={parsedDemoVideoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.link}
-                aria-label={`${title} demo video`}
-              >
-                <VideoIcon />
-                <span>Watch Demo</span>
-              </a>
-            )}
-          </div>
+          {liveUrl && (
+            <a
+              href={liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${styles.action} ${styles.actionPrimary}`}
+              aria-label={`${title} live demo`}
+            >
+              <ExternalIcon />
+              Live Demo
+              <span className={styles.arrow} aria-hidden="true">
+                →
+              </span>
+            </a>
+          )}
+          {videoUrl && (
+            <a
+              href={videoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.action}
+              aria-label={`${title} demo video`}
+            >
+              <VideoIcon />
+              Demo Video
+              <span className={styles.arrow} aria-hidden="true">
+                →
+              </span>
+            </a>
+          )}
         </div>
       </div>
     </article>
   );
-}
-
-function altText(title) {
-  return `${title} project screenshot`;
 }

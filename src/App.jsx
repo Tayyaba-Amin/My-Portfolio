@@ -17,10 +17,40 @@ function App() {
     if (meta) meta.setAttribute("content", siteMeta.description);
   }, []);
 
+  // Gentle section reveals. Content is visible by default; the hidden
+  // state lives behind `html.js` so it can never hide content if JS fails.
+  useEffect(() => {
+    const nodes = Array.from(document.querySelectorAll("[data-reveal]"));
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!("IntersectionObserver" in window) || reduced) {
+      nodes.forEach((node) => node.classList.add("is-visible"));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+    );
+
+    nodes.forEach((node) => observer.observe(node));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
       <Navbar />
-      <main>
+      <main id="main">
         <Hero />
         <About />
         <Projects />

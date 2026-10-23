@@ -1,37 +1,38 @@
 .image,
 .placeholder {
-  width: 100%;
   display: block;
+  width: 100%;
   border-radius: var(--radius-md);
   border: 1px solid var(--border);
   background: var(--surface);
   object-fit: cover;
-  transition: transform var(--transition-slow);
 }
 
 .image {
   object-position: center;
 }
 
-.image:hover {
-  transform: scale(1.03);
-}
-
-/* Keep the placeholder from shifting layout */
+/* Fallback panel: quiet, deliberate, never a broken-image icon. */
 .placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: var(--space-sm, 1rem);
   text-align: center;
-  padding: var(--space-sm);
   cursor: default;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(139, 92, 246, 0.1),
+      rgba(17, 24, 39, 0.9) 55%
+    ),
+    var(--surface);
 }
 
 .placeholderText {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  letter-spacing: 0.06em;
   color: var(--text-dim);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }

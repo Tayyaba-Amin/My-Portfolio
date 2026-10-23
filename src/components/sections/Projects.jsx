@@ -6,22 +6,23 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className={`theme-light ${styles.projects}`}
+      className={`section ${styles.projects}`}
       aria-labelledby="projects-heading"
     >
       <div className="container">
-        <div className={styles.header}>
-          <p className="overline">Archive</p>
-          <h2 id="projects-heading" className={styles.heading}>
-            Selected work
+        <header className={styles.header} data-reveal>
+          <p className="eyebrow">Selected work</p>
+          <h2 id="projects-heading" className="section-title">
+            Projects I&apos;ve built
           </h2>
-          <p className={styles.subhead}>
-            Six applications I've built — from AI-powered tools to full-stack
-            marketplaces. Each is a real project, linked to its repository.
+          <p className={`section-lead ${styles.lead}`}>
+            Six applications I&apos;ve built — from AI-powered tools to
+            full-stack marketplaces. Each is a real project, linked to its
+            repository.
           </p>
-        </div>
+        </header>
 
-        <div className={styles.list}>
+        <div className={styles.grid}>
           {projects.map((project, i) => (
             <ProjectCard key={project.id} project={project} index={i} />
           ))}

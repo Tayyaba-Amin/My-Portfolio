@@ -1,133 +1,174 @@
 .contact {
   background: var(--bg);
-  color: var(--text);
 }
 
-.container {
-  width: var(--max-width);
+.card {
+  position: relative;
+  max-width: 56rem;
   margin-inline: auto;
-  padding-inline: var(--space-sm);
-}
-
-.content {
-  max-width: 640px;
-  margin-inline: auto;
+  padding: clamp(2.25rem, 6vw, 4.25rem) clamp(1.25rem, 5vw, 4rem);
+  overflow: hidden;
   text-align: center;
+  border: 1px solid var(--border-strong);
+  border-radius: clamp(20px, 3vw, 30px);
+  background:
+    radial-gradient(
+      90% 120% at 50% -25%,
+      rgba(139, 92, 246, 0.24) 0%,
+      transparent 62%
+    ),
+    linear-gradient(180deg, rgba(25, 35, 56, 0.92) 0%, rgba(17, 24, 39, 0.96) 100%);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Fine grid texture, faded toward the edges. */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(170, 182, 202, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(170, 182, 202, 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(70% 70% at 50% 20%, #000 0%, transparent 100%);
+  mask-image: radial-gradient(70% 70% at 50% 20%, #000 0%, transparent 100%);
+}
+
+/* Light catch along the top edge. */
+.card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 15%;
+  right: 15%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(167, 139, 250, 0.85),
+    transparent
+  );
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.eyebrow {
+  margin-bottom: 1.1rem;
 }
 
 .headline {
-  font-family: var(--font-serif);
-  font-size: clamp(1.8rem, 4vw, 2.4rem);
-  font-weight: 500;
-  line-height: 1.15;
-  letter-spacing: -0.025em;
-  color: var(--text);
-  margin-bottom: var(--space-md); /* reduced for tighter rhythm */
+  max-width: 34rem;
+  font-size: clamp(1.9rem, 4.4vw, 2.9rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
 }
 
-.intro {
-  font-family: var(--font-sans);
-  font-size: var(--text-lg);
+.invitation {
+  max-width: 32rem;
+  margin-top: 1rem;
+  font-size: 1rem;
+  line-height: 1.75;
   color: var(--text-dim);
-  line-height: 1.7;
-  margin-bottom: var(--space-lg); /* reduced from xl */
 }
 
-.links {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
+.actions {
+  margin-top: 1.9rem;
 }
 
-.row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-md);
-  flex-wrap: wrap;
+a.emailBtn {
+  padding: 0.95rem 1.55rem;
+  font-size: 0.92rem;
 }
 
-.label {
-  font-family: var(--font-sans);
-  font-size: var(--text-xs);
-  font-weight: 700;
-  color: var(--text-dim);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  min-width: 80px;
-  text-align: right;
-}
-
-.placeholder {
+.emailText {
+  margin-top: 1rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px dashed var(--border-strong);
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  color: var(--text-dim);
-  opacity: 0.5;
-  word-break: break-all;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  transition: color var(--transition), border-color var(--transition);
 }
 
-.link-arrow {
+.emailText:hover,
+.emailText:focus-visible {
+  color: var(--text);
+  border-color: var(--violet);
+}
+
+/* ---- Social buttons ---- */
+
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 1.9rem;
+  padding-top: 1.9rem;
+  border-top: 1px solid var(--border);
+  width: min(100%, 24rem);
+}
+
+.social {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-xs);
-  font-family: var(--font-sans);
-  font-size: var(--text-sm);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: var(--space-sm) var(--space-lg);
-  border-radius: var(--radius-sm);
-  transition: background var(--transition), color var(--transition), transform var(--transition);
+  gap: 0.45rem;
+  padding: 0.55rem 0.95rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  transition:
+    color var(--transition),
+    border-color var(--transition),
+    background var(--transition);
 }
 
-/* Dark theme (default) - light button with dark text */
-:root:not(.theme-light) .link-arrow,
-.theme-dark .link-arrow {
-  background: var(--color-silver);
-  color: var(--color-midnight);
-}
-
-:root:not(.theme-light) .link-arrow:hover,
-:root:not(.theme-light) .link-arrow:focus-visible,
-.theme-dark .link-arrow:hover,
-.theme-dark .link-arrow:focus-visible {
-  background: var(--color-teal-accent);
-  color: var(--color-midnight);
-  transform: translateY(-1px);
-}
-
-/* Light theme - dark button with light text */
-.theme-light .link-arrow {
-  background: var(--color-midnight);
-  color: var(--color-off-white);
-}
-
-.theme-light .link-arrow:hover,
-.theme-light .link-arrow:focus-visible {
-  background: var(--color-dark-teal);
-  color: var(--color-silver);
-  transform: translateY(-1px);
-}
-
-.link-arrow:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.link-arrow svg {
-  width: 1em;
-  height: 1em;
+.social svg {
+  width: 0.9rem;
+  height: 0.9rem;
   flex-shrink: 0;
 }
 
-@media (max-width: 480px) {
-  .row {
-    flex-direction: column;
-    gap: var(--space-sm);
+.social:hover,
+.social:focus-visible {
+  color: var(--text);
+  border-color: rgba(139, 92, 246, 0.55);
+  background: var(--violet-soft);
+}
+
+.location {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 1.6rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.location svg {
+  width: 0.8rem;
+  height: 0.8rem;
+  flex-shrink: 0;
+  color: var(--violet-bright);
+}
+
+@media (max-width: 420px) {
+  .socials {
+    width: 100%;
   }
 
-  .label {
-    text-align: center;
-    min-width: auto;
+  .emailBtn svg:first-child {
+    display: none;
   }
 }

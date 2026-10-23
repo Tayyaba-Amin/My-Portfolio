@@ -8,32 +8,31 @@ export const personal = {
   headline: "Software Engineering Student & Full-Stack Developer",
   location: "Gujrat District, Punjab, Pakistan",
   bio: [
-    "I'm Tayyaba Amin, a Software Engineering student and full-stack developer who enjoys turning ideas into practical web applications.",
-    "My projects span full-stack development, AI-powered tools, digital safety, and interactive web experiences. Through personal projects and hackathons, I've explored new technologies and built solutions to practical problems.",
+    "My journey in software development is driven by curiosity and hands-on learning. Through personal projects and hackathons, I've explored different technologies, collaborated with others, and worked on solutions to practical problems. I enjoy experimenting with new ideas and continuously improving how I design and build applications.",
   ],
   portraitImage: "/images/profile/profile.jpg",
-  aboutImage: "/images/profile/about.jpg",
 };
 
 export const hero = {
-  headline: "Building thoughtful\ndigital experiences,",
-  subheadline: "one curious idea at a time.",
+  greeting: "Hi, I'm",
+  tagline:
+    "Software Engineering Student | Full-Stack Developer & AI Enthusiast",
   intro:
-    "I'm a full-stack developer interested in building useful web applications, exploring artificial intelligence, and solving practical problems through code.",
-  indexLabel: "00",
+    "I enjoy turning ideas into useful, thoughtfully built digital experiences.",
+  info: [
+    { label: "Focus", value: "Full-Stack Development" },
+    { label: "Learning", value: "Machine Learning" },
+  ],
 };
 
 export const about = {
   headline: "Curious by nature. Learning by building.",
-  subtitle:
-    "Software Engineering · Full-stack development · AI exploration",
-  highlights: [
-    "Software Engineering student",
-    "Full-stack web application development with the MERN stack",
-    "Frontend development with React, JavaScript, TypeScript, and CSS",
-    "Backend development with Node.js, Express.js, REST APIs, and databases",
-    "Hackathons, with both solo and team participation",
-    "Interest in AI-powered applications and machine learning",
+  focusAreas: [
+    "MERN Stack Development",
+    "React, JavaScript & TypeScript",
+    "Node.js, Express.js & REST APIs",
+    "AI Exploration & Machine Learning Interests",
+    "Personal Projects & Hackathons",
   ],
 };
 
@@ -51,7 +50,8 @@ export const projects = [
     title: "Study Companion",
     description:
       "An AI-powered learning platform built for AI Factory Hackathon 2026. It transforms uploaded PDF study materials into interactive learning resources, including AI-generated summaries, quizzes, flashcards, and chat with uploaded documents. It also includes authentication and learning progress tracking.",
-    imagePlaceholder: "[STUDY_COMPANION_SCREENSHOT]",
+    summary:
+      "An AI learning platform that turns uploaded study PDFs into summaries, quizzes, flashcards, and document chat.",
     imagePath: "/images/projects/study-companion.png",
     tech: [
       "React",
@@ -73,7 +73,8 @@ export const projects = [
     title: "SafePay AI",
     description:
       "An AI-powered fraud-awareness platform focused on Pakistan's digital payments. It analyzes suspicious payment receipt screenshots, scam messages, and voice recordings to identify potential fraud indicators, assess risk, and provide safety recommendations in English and Urdu.",
-    imagePlaceholder: "safepay-ai",
+    summary:
+      "A fraud-awareness platform that analyzes receipts, scam messages, and voice recordings, with safety guidance in English and Urdu.",
     imagePath: "/images/projects/safepay-ai.png",
     tech: [
       "Next.js",
@@ -99,7 +100,8 @@ export const projects = [
     title: "PrivacyGuard",
     description:
       "A privacy-focused application that scans text and images for sensitive information, highlights potential sharing risks, and helps users protect confidential data. Features include risk scoring, image text extraction using OCR, and rescanning of protected content.",
-    imagePlaceholder: "",
+    summary:
+      "A privacy tool that scans text and images for sensitive information, flags sharing risks, and helps protect confidential data.",
     imagePath: "/images/projects/privacyguard.png",
     tech: [
       "React",
@@ -123,7 +125,8 @@ export const projects = [
     title: "PropertyHub",
     description:
       "An independently developed full-stack real estate marketplace built to apply my MERN Stack skills. The application supports property browsing, filtering, listing management, and profile management, with JWT-based authentication, Redux state management, and Firebase integration.",
-    imagePlaceholder: "[REAL_ESTATE_MARKETPLACE_SCREENSHOT]",
+    summary:
+      "A full-stack real estate marketplace with property browsing, filtering, listing management, JWT authentication, and Firebase.",
     imagePath: "/images/projects/real-estate-marketplace.png",
     tech: [
       "MongoDB",
@@ -148,7 +151,8 @@ export const projects = [
     title: "QuickShow",
     description:
       "A full-stack movie ticket booking application with movie browsing, showtime and seat selection, ticket bookings, payment integration, user authentication, booking history, and an admin dashboard. It also supports automated seat release for unpaid bookings and email notifications.",
-    imagePlaceholder: "[QUICKSHOW_SCREENSHOT]",
+    summary:
+      "A full-stack movie ticket booking app with showtimes, seat selection, payments, booking history, and an admin dashboard.",
     imagePath: "/images/projects/quickshow.png",
     tech: [
       "React",
@@ -170,7 +174,8 @@ export const projects = [
     title: "Dastarkhwan",
     description:
       "A frontend experience celebrating the emotions, memories, and sense of belonging associated with Pakistani comfort food. Created for the DEV Community Frontend Challenge: Comfort Food Edition, the project focuses on storytelling, visual design, and an interactive comfort-food experience.",
-    imagePlaceholder: "[DASTARKHWAN_SCREENSHOT]",
+    summary:
+      "A frontend experience celebrating Pakistani comfort food through storytelling, visual design, and interactive exploration.",
     imagePath: "/images/projects/dastarkhwan.png",
     tech: ["HTML5", "CSS3", "JavaScript"],
     category: "Frontend Development",
