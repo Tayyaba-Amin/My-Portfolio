@@ -117,7 +117,7 @@ export const projects = [
     builtFor: "ForgeHacks Online 2026",
     repoUrl: "https://github.com/Tayyaba-Amin/PrivacyGuard",
     demoUrl: "https://privacy-guard-phi.vercel.app/",
-    demoVideoUrl: "",
+    demoVideoUrl: "https://youtu.be/tzYdVVIxBRQ",
     note:
       "Optional AI explanations may be unavailable, but core detection features are designed to work without an AI API key.",
   },
