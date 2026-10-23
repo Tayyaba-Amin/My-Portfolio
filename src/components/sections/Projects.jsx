@@ -27,7 +27,7 @@ export default function Projects() {
           <p
             className={`section-lead ${styles.lead}`}
             data-reveal
-            style={{ animationDelay: "210ms" }}
+            style={{ "--reveal-delay": "230ms" }}
           >
             Six applications I&apos;ve built — from AI-powered tools to
             full-stack marketplaces. Each is a real project, linked to its

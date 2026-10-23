@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { navLinks, personal } from "../../config/siteData";
+import { motionsOff } from "../../lib/motion";
 import { MenuIcon, CloseIcon } from "../common/icons";
 import styles from "./Navbar.module.css";
 
@@ -19,7 +20,7 @@ export default function Navbar() {
   const close = () => {
     if (!open) return;
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (motionsOff()) {
       setOpen(false);
       setClosing(false);
       return;

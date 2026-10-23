@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-
-const prefersReduced = () =>
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+import { motionsOff } from "../lib/motion";
 
 /**
  * Types a sequence of text segments into `[data-type-chunk]` nodes.
@@ -26,9 +24,7 @@ export default function useTypewriter(
   { speed = 70, startDelay = 250, segmentGap = 140, hold = 450, onDone } = {}
 ) {
   const rootRef = useRef(null);
-  const [state, setState] = useState(() =>
-    prefersReduced() ? "done" : "ready"
-  );
+  const [state, setState] = useState(() => (motionsOff() ? "done" : "ready"));
   const doneRef = useRef(onDone);
   doneRef.current = onDone;
 
@@ -39,7 +35,7 @@ export default function useTypewriter(
     const nodes = Array.from(root.querySelectorAll("[data-type-chunk]"));
     if (!nodes.length) return;
 
-    if (prefersReduced()) {
+    if (motionsOff()) {
       setState("done");
       return;
     }

@@ -35,14 +35,15 @@
   max-width: 24rem;
 }
 
-/* Short accent under the heading, drawn when the section arrives. */
+/* Accent under the heading, drawn when the section arrives. */
 .headRule {
   display: block;
-  width: 3.25rem;
+  width: 5rem;
   height: 2px;
   margin-top: 1.15rem;
   border-radius: 2px;
   background: linear-gradient(90deg, var(--coral), var(--lilac));
+  box-shadow: 0 0 12px rgba(255, 107, 129, 0.35);
 }
 
 .body {

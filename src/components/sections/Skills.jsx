@@ -35,7 +35,7 @@ export default function Skills() {
           <p
             className="section-lead"
             data-reveal
-            style={{ animationDelay: "210ms" }}
+            style={{ "--reveal-delay": "230ms" }}
           >
             The technologies behind my projects, plus what I&apos;m learning
             next.
@@ -47,8 +47,8 @@ export default function Skills() {
             <div
               key={group.label}
               className={`${styles.group} ${group.accent ? styles.accent : ""}`}
-              data-reveal
-              style={{ animationDelay: `${i * 70}ms` }}
+              data-reveal="panel"
+              style={{ "--reveal-delay": `${i * 110}ms` }}
             >
               <div className={styles.groupHead}>
                 <span className={styles.marker} aria-hidden="true" />
@@ -68,7 +68,7 @@ export default function Skills() {
         <div
           className={styles.foundations}
           data-reveal
-          style={{ animationDelay: `${groups.length * 70}ms` }}
+          style={{ "--reveal-delay": `${groups.length * 110}ms` }}
         >
           <span className={styles.foundationsLabel}>Foundations</span>
           <ul className={styles.foundationsList}>

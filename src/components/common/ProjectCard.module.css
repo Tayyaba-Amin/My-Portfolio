@@ -1,4 +1,5 @@
 .card {
+  --lift: 0px;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -7,18 +8,45 @@
   border-radius: var(--radius-lg);
   background: var(--gradient-card);
   box-shadow: var(--shadow-sm);
+  /* Restrained card tilt; the screenshot shifts the other way for depth. */
+  transform:
+    perspective(1000px)
+    translateY(var(--lift))
+    rotateX(calc(var(--tilt-ny, 0) * -1.2deg))
+    rotateY(calc(var(--tilt-nx, 0) * 1.8deg));
   transition:
-    transform var(--transition),
+    transform 300ms var(--ease),
     border-color var(--transition),
     box-shadow var(--transition);
 }
 
-.card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(255, 107, 129, 0.4);
-  box-shadow:
-    0 30px 60px -30px rgba(8, 4, 12, 0.95),
-    0 0 0 1px rgba(255, 107, 129, 0.12);
+/* Pointer embellishments stay off touch screens. */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    position: relative;
+    z-index: 2;
+    --lift: -6px;
+    border-color: rgba(255, 107, 129, 0.4);
+    box-shadow:
+      0 30px 60px -28px rgba(8, 4, 12, 0.95),
+      0 0 0 1px rgba(255, 107, 129, 0.12);
+  }
+
+  .card:hover .media img {
+    /* The screenshot slides against the tilt, so the card reads as layered. */
+    transform: translate3d(
+        calc(var(--tilt-nx, 0) * -8px),
+        calc(var(--tilt-ny, 0) * -5px),
+        0
+      )
+      scale(1.06);
+  }
+
+  /* Hovering anywhere on the card also brings the arrows in diagonally. */
+  .card:hover .arrow {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* ---- Screenshot ---- */
@@ -47,23 +75,21 @@
   width: 100%;
   border: 0;
   border-radius: 0;
-  object-fit: cover;
-  object-position: top center;
-  transition: transform 0.7s var(--ease);
-}
-
-.card:hover .media img {
-  transform: scale(1.04);
+  /* `contain` keeps full screenshots visible at three-column widths. */
+  object-fit: contain;
+  object-position: center;
+  transition: transform 220ms var(--ease);
 }
 
 /* The screenshot settles inside its frame as the card arrives. */
 .card:global(.is-visible) .media img {
-  animation: shot-settle 1.2s var(--ease-out) 140ms backwards;
+  animation: shot-settle 1.2s var(--ease-out)
+    calc(var(--reveal-delay, 0ms) + 80ms) backwards;
 }
 
 @keyframes shot-settle {
   from {
-    transform: scale(1.06);
+    transform: scale(1.12);
   }
   to {
     transform: none;
@@ -80,15 +106,17 @@
   opacity: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
+@media screen {
   /* `both` keeps the finished crop, otherwise the base rule would re-hide
      the screenshot the moment the wipe ends. */
   :global(html.js) .card:global(.is-visible) .media {
-    animation: media-wipe 900ms var(--ease-out) both;
+    animation: media-wipe 950ms var(--ease-out)
+      calc(var(--reveal-delay, 0ms) + 60ms) both;
   }
 
   :global(html.js) .card:global(.is-visible) .body {
-    animation: body-in 650ms var(--ease-out) 380ms both;
+    animation: body-in 620ms var(--ease-out)
+      calc(var(--reveal-delay, 0ms) + 380ms) both;
   }
 }
 
@@ -104,7 +132,7 @@
 @keyframes body-in {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(18px);
   }
   to {
     opacity: 1;
@@ -113,64 +141,73 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :global(html.js) .card .media {
+  html:not(.motion-on) .card .media {
     clip-path: none;
   }
 
-  :global(html.js) .card .body {
+  html:not(.motion-on) .card .body {
     opacity: 1;
   }
 }
+
+/* ---- Body ---- */
 
 .metaRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 0.5rem;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
 }
 
 .category {
   font-family: var(--font-mono);
-  font-size: 0.64rem;
+  font-size: 0.62rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
   color: var(--coral);
 }
-
-/* ---- Body ---- */
 
 .body {
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: clamp(1.15rem, 2.2vw, 1.5rem);
+  padding: clamp(0.95rem, 1.5vw, 1.2rem);
 }
 
 .title {
-  font-size: 1.24rem;
+  font-size: 1.14rem;
   font-weight: 600;
+  line-height: 1.25;
   letter-spacing: -0.02em;
 }
 
 .num {
   font-family: var(--font-mono);
-  font-size: 0.66rem;
+  font-size: 0.62rem;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   color: var(--text-muted);
 }
 
 .builtFor {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
-  margin-top: 0.35rem;
-  font-size: 0.76rem;
+  gap: 0.4rem;
+  min-width: 0;
+  margin-top: 0.3rem;
+  font-size: 0.72rem;
   font-weight: 500;
   line-height: 1.5;
   color: var(--text-muted);
+}
+
+/* Long event names stay on one quiet line instead of stretching the card. */
+.builtText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .builtDot {
@@ -183,26 +220,49 @@
 }
 
 .summary {
-  margin-top: 0.75rem;
-  font-size: 0.92rem;
-  line-height: 1.65;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+  margin-top: 0.6rem;
+  font-size: 0.88rem;
+  line-height: 1.6;
   color: var(--text-dim);
 }
 
 .tech {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem;
-  margin-top: 1.05rem;
+  gap: 0.3rem;
+  margin-top: 0.8rem;
+}
+
+/* Compact tags; the full-size chip is reserved for the skills lists. */
+.chip {
+  padding: 0.24rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: rgba(248, 241, 235, 0.04);
+  font-size: 0.7rem;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.005em;
+  color: var(--text-dim);
 }
 
 .note {
-  margin-top: 0.9rem;
-  padding-left: 0.7rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  margin-top: 0.75rem;
+  padding-left: 0.6rem;
   border-left: 2px solid rgba(255, 107, 129, 0.45);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-style: italic;
-  line-height: 1.55;
+  line-height: 1.5;
   color: var(--text-muted);
 }
 
@@ -211,21 +271,22 @@
 .actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.35rem;
   margin-top: auto;
-  padding-top: 1rem;
+  padding-top: 0.9rem;
   border-top: 1px solid var(--border);
 }
 
 .action {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.45rem 0.7rem;
+  gap: 0.32rem;
+  padding: 0.4rem 0.55rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-xs);
-  font-size: 0.74rem;
+  font-size: 0.7rem;
   font-weight: 600;
+  white-space: nowrap;
   color: var(--text-dim);
   transition:
     color var(--transition),
@@ -235,8 +296,8 @@
 
 /* Arrow only slides in on hover; its space is always reserved. */
 .arrow {
-  margin-left: 0.1rem;
-  font-size: 0.85em;
+  margin-left: 0.05rem;
+  font-size: 0.8em;
   line-height: 1;
   opacity: 0;
   transform: translate(-3px, 3px);
@@ -252,8 +313,8 @@
 }
 
 .action svg {
-  width: 0.82rem;
-  height: 0.82rem;
+  width: 0.78rem;
+  height: 0.78rem;
   flex-shrink: 0;
   transition: transform var(--transition);
 }
@@ -284,10 +345,10 @@
 
 @media (max-width: 480px) {
   .title {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
   }
 
   .summary {
-    font-size: 0.88rem;
+    font-size: 0.86rem;
   }
 }

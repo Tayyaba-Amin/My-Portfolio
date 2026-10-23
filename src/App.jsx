@@ -8,6 +8,7 @@ import Skills from "./components/sections/Skills";
 import Interests from "./components/sections/Interests";
 import Contact from "./components/sections/Contact";
 import { siteMeta } from "./config/siteData";
+import { motionsOff } from "./lib/motion";
 import "./App.css";
 
 function App() {
@@ -21,7 +22,7 @@ function App() {
   // state lives behind `html.js` so it can never hide content if JS fails.
   useEffect(() => {
     const nodes = Array.from(document.querySelectorAll("[data-reveal]"));
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduced = motionsOff();
 
     if (!("IntersectionObserver" in window) || reduced) {
       nodes.forEach((node) => node.classList.add("is-visible"));

@@ -34,13 +34,29 @@ html.js [data-reveal].is-visible {
   opacity: 1;
 }
 
-html.js [data-reveal]:not([data-reveal="words"]):not([data-reveal="card"]):not([data-reveal="rule"]).is-visible {
-  animation: reveal-up var(--dur-reveal) var(--ease-out) backwards;
+/* Every reveal accepts an optional --reveal-delay, so a section can stagger
+   its children while child animations stay in step with the parent. */
+html.js
+  [data-reveal]:not([data-reveal="words"]):not([data-reveal="rule"]):not([data-reveal="card"]):not(
+    [data-reveal="slide"]
+  ):not([data-reveal="panel"]).is-visible {
+  animation: reveal-up var(--dur-reveal) var(--ease-out) var(--reveal-delay, 0ms)
+    backwards;
 }
 
-/* The contact card gets one slightly richer entrance than body copy. */
+/* Body copy slides in from the side instead of repeating the fade-up. */
+html.js [data-reveal="slide"].is-visible {
+  animation: reveal-slide 900ms var(--ease-out) var(--reveal-delay, 0ms) backwards;
+}
+
+/* Grouped panels settle with a slight scale so they read as objects. */
+html.js [data-reveal="panel"].is-visible {
+  animation: reveal-panel 880ms var(--ease-out) var(--reveal-delay, 0ms) backwards;
+}
+
+/* The contact card gets one richer entrance than body copy. */
 html.js [data-reveal="card"].is-visible {
-  animation: reveal-card 900ms var(--ease-out) backwards;
+  animation: reveal-card 980ms var(--ease-out) var(--reveal-delay, 0ms) backwards;
 }
 
 /* Rules draw themselves outward instead of fading. */
@@ -51,7 +67,8 @@ html.js [data-reveal="rule"] {
 }
 
 html.js [data-reveal="rule"].is-visible {
-  animation: rule-draw 900ms var(--ease-out) 120ms forwards;
+  animation: rule-draw 900ms var(--ease-out) calc(var(--reveal-delay, 0ms) + 160ms)
+    forwards;
 }
 
 @keyframes rule-draw {
@@ -66,7 +83,29 @@ html.js [data-reveal="rule"].is-visible {
 @keyframes reveal-up {
   from {
     opacity: 0;
-    transform: translateY(22px);
+    transform: translateY(34px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes reveal-slide {
+  from {
+    opacity: 0;
+    transform: translateX(-44px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes reveal-panel {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.955);
   }
   to {
     opacity: 1;
@@ -77,7 +116,7 @@ html.js [data-reveal="rule"].is-visible {
 @keyframes reveal-card {
   from {
     opacity: 0;
-    transform: translateY(18px) scale(0.985);
+    transform: translateY(26px) scale(0.965);
   }
   to {
     opacity: 1;
@@ -195,19 +234,19 @@ html.js .type-live[data-state="ready"] {
    -------------------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
-  html.js [data-reveal],
-  html.js [data-reveal="rule"],
-  html.js [data-reveal="words"]:not(.is-visible) .split-word-inner,
-  .split-word-inner--auto,
-  html.js .type-live[data-state="ready"],
-  .type-caret {
+  html:not(.motion-on) [data-reveal],
+  html:not(.motion-on) [data-reveal="rule"],
+  html:not(.motion-on) [data-reveal="words"]:not(.is-visible) .split-word-inner,
+  html:not(.motion-on) .split-word-inner--auto,
+  html:not(.motion-on) .type-live[data-state="ready"],
+  html:not(.motion-on) .type-caret {
     opacity: 1 !important;
     animation: none !important;
     transform: none !important;
     clip-path: none !important;
   }
 
-  .type-caret {
+  html:not(.motion-on) .type-caret {
     display: none !important;
   }
 }

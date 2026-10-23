@@ -90,6 +90,8 @@
 }
 
 .copy {
+  position: relative;
+  z-index: 2;
   max-width: 36rem;
 }
 
@@ -188,22 +190,20 @@
   align-content: center;
 }
 
-.tagLive[data-settled] > span {
-  animation: tag-settle 520ms var(--ease-out) backwards;
+/* The role slot stays hidden until the name has finished typing, so the
+   opening reads as name first, role second. */
+:global(html.js) .tagLive {
+  opacity: 0;
 }
 
-.tagLive[data-settled] > span:nth-child(2) {
-  animation-delay: 70ms;
+:global(html.js) .tagLive[data-live] {
+  animation: tag-in 560ms var(--ease-out) both;
 }
 
-.tagLive[data-settled] > span:nth-child(3) {
-  animation-delay: 140ms;
-}
-
-@keyframes tag-settle {
+@keyframes tag-in {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -211,23 +211,70 @@
   }
 }
 
-/* Keeps the caret glued to the last character instead of the flex gap. */
-.tagRun {
-  display: inline-flex;
+/* The role slot is a mask: whole lines roll through it instead of fading. */
+.roleViewport {
+  --role-h: 1.6em;
+  display: block;
+  width: 100%;
+  height: var(--role-h);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 16%,
+    #000 84%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 16%,
+    #000 84%,
+    transparent 100%
+  );
+}
+
+.roleTrack {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(calc(var(--role-index, 0) * var(--role-h) * -1));
+  transition: transform 360ms cubic-bezier(0.16, 0.84, 0.24, 1);
+}
+
+.roleLine {
+  display: flex;
   align-items: center;
+  height: var(--role-h);
+  line-height: 1.6;
+  white-space: nowrap;
+  color: var(--text);
 }
 
-.tagCaret {
-  display: inline-block;
-  width: 0.075em;
-  height: 0.9em;
-  margin-left: 0.055em;
-  vertical-align: -0.06em;
-  border-radius: 1px;
-  background: var(--coral);
-  animation: caret-blink 1.05s steps(1) infinite;
+/* The full line resolves in three pieces once the roll has finished. */
+.tagLive[data-settled] > span {
+  animation: tag-settle 620ms var(--ease-out) backwards;
 }
 
+.tagLive[data-settled] > span:nth-child(2) {
+  animation-delay: 80ms;
+}
+
+.tagLive[data-settled] > span:nth-child(3) {
+  animation-delay: 160ms;
+}
+
+@keyframes tag-settle {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Separator between the two stated roles. */
 .pipe {
   font-weight: 400;
   color: var(--lilac);
@@ -239,6 +286,9 @@
   font-size: 1.02rem;
   line-height: 1.75;
   color: var(--text-dim);
+  /* Reserves the final two-line height: the fallback font fits on one line,
+     so without this the late web-font swap re-centres the whole hero copy. */
+  min-height: 3.5em;
 }
 
 .actions {
@@ -247,9 +297,57 @@
   gap: 0.75rem;
 }
 
-/* ---- Portrait ---- */
+/* Quiet utility controls, not a third call to action. */
+.replayRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.1rem;
+}
+
+.replayBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    color var(--transition),
+    border-color var(--transition),
+    background var(--transition);
+}
+
+.replayBtn svg {
+  width: 0.8rem;
+  height: 0.8rem;
+  transition: transform 600ms var(--ease);
+}
+
+.replayBtn:hover,
+.replayBtn:focus-visible {
+  color: var(--text);
+  border-color: var(--border);
+  background: rgba(248, 241, 235, 0.04);
+}
+
+.replayBtn:hover svg {
+  transform: rotate(-180deg);
+}
+
+/* ---- Portrait composition ---- */
 
 .portraitColumn {
+  position: relative;
   display: flex;
   justify-content: center;
 }
@@ -260,73 +358,128 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 25rem;
+  max-width: 22.5rem;
 }
 
-/* Pointer tilt lives on this wrapper so the entrance animation stays intact. */
-.portraitTilt {
+/* A coordinate space for the composition; the ring spills past the disc. */
+.stage {
   position: relative;
   width: 100%;
-  transform: translate3d(var(--tilt-x, 0px), var(--tilt-y, 0px), 0);
-  transition: transform 500ms var(--ease);
-  will-change: transform;
+  aspect-ratio: 1;
+  isolation: isolate;
 }
 
-.portraitGlow {
+/* Blurred light around the frame: a soft radial bloom that peaks just past
+   the ring and fades outward. Drawn as a gradient rather than a filter, so
+   it stays a cheap paint under the disc. */
+.halo {
   position: absolute;
-  inset: 8% -14% -6%;
-  z-index: -1;
+  inset: -20%;
+  z-index: 0;
   border-radius: 50%;
   background: radial-gradient(
-    circle,
-    rgba(255, 107, 129, 0.26) 0%,
-    rgba(196, 161, 255, 0.08) 52%,
-    transparent 72%
+    circle closest-side,
+    rgba(255, 145, 158, 0) 58%,
+    rgba(255, 122, 138, 0.4) 71%,
+    rgba(255, 107, 129, 0.2) 82%,
+    rgba(255, 90, 110, 0) 95%
   );
-  filter: blur(26px);
-}
-
-.frame {
-  position: relative;
-  overflow: hidden;
-  padding: 9px;
-  border-radius: 26px;
-  background: linear-gradient(
-    155deg,
-    rgba(255, 198, 168, 0.5) 0%,
-    rgba(255, 107, 129, 0.3) 38%,
-    rgba(196, 161, 255, 0.26) 72%,
-    rgba(248, 241, 235, 0.06) 100%
-  );
-  box-shadow: 0 45px 90px -50px rgba(8, 4, 12, 0.95);
-}
-
-.frame img {
-  width: 100%;
-  border: 0;
-  border-radius: 18px;
-  object-fit: cover;
-  object-position: center 22%;
-}
-
-/* Curtain that lifts off the photo as the portrait arrives. */
-.frame::after {
-  content: "";
-  position: absolute;
-  inset: 9px;
-  z-index: 2;
-  border-radius: 18px;
   pointer-events: none;
-  background: linear-gradient(180deg, #2a2036 0%, #1d1627 100%);
+  translate: calc(var(--tilt-x, 0px) * 0.12) calc(var(--tilt-y, 0px) * 0.12);
 }
 
-/* Glass info card sits below the portrait with a deliberate gap. */
+/* Solid disc behind the portrait, like a studio backdrop cropped to a circle. */
+.disc {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  aspect-ratio: 1;
+  z-index: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      120% 110% at 28% 18%,
+      rgba(255, 255, 255, 0.13),
+      transparent 56%
+    ),
+    linear-gradient(158deg, #d2b8ff 0%, #b993fb 38%, #9a72ea 72%, #7a4fc9 100%);
+  translate: calc(var(--tilt-x, 0px) * 0.12) calc(var(--tilt-y, 0px) * 0.12);
+}
+
+/* Open coral ring: thick stroke, rounded ends, gap at the lower left. It sits
+   outside the disc like a hoop, so the purple circle reads as a framed photo. */
+.ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  aspect-ratio: 1;
+  z-index: 4;
+  overflow: visible;
+  pointer-events: none;
+  transform: scale(1.12);
+  transform-origin: 50% 50%;
+  translate: calc(var(--tilt-x, 0px) * 0.12) calc(var(--tilt-y, 0px) * 0.12);
+}
+
+.ringPath {
+  /* Path length of the 234deg arc; the intro animates the offset to zero. */
+  stroke-dasharray: 384;
+  stroke-dashoffset: 0;
+}
+
+/* The circle is the frame: the cutout is cropped to it, so nothing spills past
+   the disc. The frame carries the pointer parallax for the whole group. */
+.frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  aspect-ratio: 1;
+  z-index: 3;
+  overflow: hidden;
+  border-radius: 50%;
+  translate: calc(var(--tilt-x, 0px) * 0.12) calc(var(--tilt-y, 0px) * 0.12);
+}
+
+/* Sized past the circle on purpose; the frame crops the overflow. The top
+   edge is anchored so the head is never cut: the zoom eats into the bottom. */
+.portraitTilt {
+  position: absolute;
+  top: 7%;
+  left: 50%;
+  width: 84%;
+  transform: translateX(-50%);
+}
+
+.cutoutReveal {
+  position: relative;
+}
+
+.cutoutReveal .cutout {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  object-fit: contain;
+}
+
+/* Glass info card sits below the portrait with a deliberate gap. The extra 6%
+   clears the ring, which spills past the square stage. */
 .infoCard {
+  position: relative;
+  z-index: 4;
   display: flex;
-  margin-top: var(--portrait-gap);
+  width: 100%;
+  max-width: 23.5rem;
+  margin-top: calc(var(--portrait-gap) + 6%);
   align-items: center;
+  justify-content: space-between;
   gap: 0;
-  padding: 0.75rem 0.3rem;
+  padding: 0.75rem 0.55rem;
   border: 1px solid var(--border-strong);
   border-radius: 14px;
   background: rgba(33, 25, 43, 0.94);
@@ -369,44 +522,69 @@
   color: var(--text);
 }
 
-/* ---- Entrance motion ---- */
+/* ---- Entrance motion ----
+   Declared for everyone. The reduced-motion layer in index.css collapses
+   these to their final frame unless the visitor opts in via html.motion-on. */
 
-@media (prefers-reduced-motion: no-preference) {
+@media screen {
   .badge {
-    animation: enter-up 650ms var(--ease-out) backwards;
+    animation: badge-in 620ms var(--ease-out) 80ms backwards;
   }
 
   .intro {
-    animation: enter-up 700ms var(--ease-out) 2680ms backwards;
+    animation: support-in 780ms var(--ease-out) 3050ms backwards;
   }
 
   .actions > a {
-    animation: cta-in 650ms var(--ease-out) backwards;
+    animation: cta-in 680ms var(--ease-out) backwards;
   }
 
   .actions > a:nth-child(1) {
-    animation-delay: 2820ms;
+    animation-delay: 3180ms;
   }
 
   .actions > a:nth-child(2) {
-    animation-delay: 2920ms;
+    animation-delay: 3260ms;
   }
 
-  .portrait {
-    animation: portrait-in 900ms var(--ease-out) 700ms backwards;
+  /* 1. The disc blooms in, then the ring draws itself around it. */
+  .halo {
+    animation:
+      halo-in 900ms var(--ease-out) 0ms backwards,
+      halo-breathe 9s ease-in-out 900ms infinite alternate;
   }
 
-  .frame img {
-    animation: portrait-img 1s var(--ease-out) 780ms backwards;
+  .disc {
+    animation: disc-in 760ms var(--ease-out) 0ms backwards;
   }
 
-  .frame::after {
-    animation: curtain-up 900ms var(--ease-out) 780ms both;
-    transform-origin: 50% 100%;
+  .ringPath {
+    animation: ring-draw 1050ms cubic-bezier(0.32, 0.72, 0.24, 1) 160ms backwards;
+  }
+
+  /* 2. The portrait rises out of the disc, then takes a soft light. */
+  .cutout {
+    animation: cutout-rise 1000ms var(--ease-out) 480ms backwards;
   }
 
   .infoCard {
-    animation: enter-up 700ms var(--ease-out) 1050ms backwards;
+    animation: info-in 760ms var(--ease-out) 1000ms backwards;
+  }
+
+  /* The replay control only matters once there is an opening to replay. */
+  .replayRow {
+    animation: replay-in 700ms var(--ease-out) 3600ms backwards;
+  }
+
+  @keyframes replay-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   /* Gentle ambient drift, long enough to be felt rather than watched. */
@@ -418,21 +596,34 @@
     animation: drift-b 32s ease-in-out infinite alternate;
   }
 
-  @keyframes enter-up {
+  @keyframes badge-in {
     from {
       opacity: 0;
-      transform: translateY(14px);
+      transform: translateX(-18px);
     }
     to {
       opacity: 1;
       transform: none;
+    }
+  }
+
+  @keyframes support-in {
+    from {
+      opacity: 0;
+      transform: translateY(26px);
+      filter: blur(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+      filter: blur(0);
     }
   }
 
   @keyframes cta-in {
     from {
       opacity: 0;
-      transform: translateY(12px) scale(0.97);
+      transform: translateY(18px) scale(0.96);
     }
     to {
       opacity: 1;
@@ -440,10 +631,13 @@
     }
   }
 
-  @keyframes portrait-in {
+  @keyframes disc-in {
     from {
       opacity: 0;
-      transform: translateY(18px) scale(0.975);
+      transform: scale(0.84);
+    }
+    55% {
+      opacity: 1;
     }
     to {
       opacity: 1;
@@ -451,21 +645,58 @@
     }
   }
 
-  @keyframes portrait-img {
+  @keyframes halo-in {
     from {
-      transform: scale(1.06);
+      opacity: 0;
     }
     to {
+      opacity: 0.62;
+    }
+  }
+
+  /* Long, uneven breathing so the light feels ambient, not blinking. */
+  @keyframes halo-breathe {
+    from {
+      opacity: 0.62;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes ring-draw {
+    from {
+      stroke-dashoffset: 384;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes cutout-rise {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 22%, 0) scale(1.04);
+    }
+    /* Solid almost at once: a long fade would let the shapes show through
+       the face, which reads as a double exposure rather than an entrance. */
+    22% {
+      opacity: 1;
+    }
+    to {
+      opacity: 1;
       transform: none;
     }
   }
 
-  @keyframes curtain-up {
+  @keyframes info-in {
     from {
-      transform: scaleY(1);
+      opacity: 0;
+      transform: translateY(24px);
     }
     to {
-      transform: scaleY(0);
+      opacity: 1;
+      transform: none;
     }
   }
 
@@ -491,11 +722,17 @@
 /* ---- Responsive ---- */
 
 /* Narrow split layout: the tagline wraps without stranding the pipe. */
-@media (min-width: 981px) and (max-width: 1180px) {
+@media (min-width: 861px) and (max-width: 1180px) {
   .tagline {
     flex-direction: column;
     align-items: flex-start;
     row-gap: 0.25rem;
+  }
+
+  /* In a column, align-content acts on the horizontal axis; without this the
+     block centres itself and the tagline drifts away from the title. */
+  .tagLive {
+    align-content: flex-start;
   }
 
   .pipe {
@@ -503,11 +740,23 @@
   }
 }
 
-@media (max-width: 980px) {
+/* Below a small laptop the composition leads and the copy follows. Keeping
+   the split layout down to 861px stops laptops around 900-1000px from
+   getting a hero that is taller than their screen. */
+@media (max-width: 860px) {
+  .hero {
+    padding-block: clamp(1.75rem, 4vw, 2.5rem) clamp(2.5rem, 5vw, 3.5rem);
+  }
+
   .inner {
     grid-template-columns: 1fr;
-    gap: 2.75rem;
+    gap: clamp(1.25rem, 3vw, 1.9rem);
     min-height: 0;
+  }
+
+  /* The composition leads on narrow screens; the name follows immediately. */
+  .portraitColumn {
+    order: -1;
   }
 
   .copy {
@@ -523,19 +772,52 @@
     justify-content: center;
   }
 
+  .roleLine {
+    justify-content: center;
+  }
+
   .intro {
     margin-inline: auto;
   }
 
   .portrait {
-    max-width: 21rem;
+    max-width: 22rem;
     margin-bottom: 0;
+  }
+
+  .infoCard {
+    max-width: 22rem;
+  }
+
+  .replayRow {
+    justify-content: center;
   }
 }
 
+/* Phones: the frame shrinks with the gutter and the copy tightens, so the
+   call to action stays close to the fold. */
 @media (max-width: 520px) {
+  .portrait {
+    max-width: 17.5rem;
+  }
+
+  .infoCard {
+    width: 100%;
+    max-width: 17.5rem;
+    padding-inline: 0.2rem;
+  }
+
+  .badge {
+    margin-bottom: 1.1rem;
+  }
+
   .title {
-    font-size: clamp(2.3rem, 9vw, 3rem);
+    margin-bottom: 0.9rem;
+    font-size: clamp(2.15rem, 9vw, 3rem);
+  }
+
+  .tagWrap {
+    margin-bottom: 0.85rem;
   }
 
   .tagline {
@@ -549,6 +831,41 @@
     display: none;
   }
 
+  .intro {
+    margin-bottom: 1.4rem;
+  }
+
+  .infoItem {
+    padding-inline: 0.5rem;
+  }
+
+  .infoValue {
+    font-size: 0.72rem;
+  }
+}
+
+/* Small phones: the info card tightens further so its text never runs past
+   the border. */
+@media (max-width: 400px) {
+  .portrait {
+    max-width: 16.5rem;
+  }
+
+  .infoCard {
+    max-width: 16.5rem;
+  }
+
+  .infoItem {
+    padding-inline: 0.45rem;
+  }
+
+  .infoValue {
+    font-size: 0.7rem;
+  }
+}
+
+/* Below this width the two CTAs can no longer share a line. */
+@media (max-width: 370px) {
   .actions {
     width: 100%;
     flex-direction: column;
@@ -557,34 +874,21 @@
   .actions > a {
     width: 100%;
   }
-
-  .infoCard {
-    width: 100%;
-  }
-
-  .infoItem {
-    padding-inline: 0.7rem;
-  }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 340px) {
+  .title {
+    font-size: clamp(2rem, 9vw, 2.45rem);
+  }
+
   .tagline {
-    font-size: 0.87rem;
-  }
-
-  .infoItem {
-    padding-inline: 0.55rem;
-  }
-
-  .infoValue {
-    font-size: 0.74rem;
+    font-size: 0.86rem;
   }
 }
 
 /* Pointer-following light is a desktop nicety only. */
 @media (prefers-reduced-motion: reduce) {
-  .spotlight,
-  .frame::after {
+  html:not(.motion-on) .spotlight {
     display: none;
   }
 }

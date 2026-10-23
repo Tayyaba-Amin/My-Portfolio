@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Local design QA captures and scratch files
+qa-*
+.qa-chrome*
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

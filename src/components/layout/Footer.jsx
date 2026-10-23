@@ -1,73 +1,41 @@
-import { personal, contact } from "../../config/siteData";
-import { GithubIcon, LinkedInIcon, EmailIcon } from "../common/icons";
+import { personal } from "../../config/siteData";
+import { motionEnabled, setMotionEnabled } from "../../lib/motion";
 import styles from "./Footer.module.css";
 
 export default function Footer() {
   const year = new Date().getFullYear();
-
-  const socialLinks = [
-    { label: "GitHub", href: contact.github, Icon: GithubIcon, external: true },
-    { label: "LinkedIn", href: contact.linkedin, Icon: LinkedInIcon, external: true },
-    {
-      label: "Email",
-      href: `mailto:${contact.email}`,
-      Icon: EmailIcon,
-      external: false,
-    },
-  ];
+  const animated = motionEnabled();
 
   return (
     <footer className={styles.footer}>
-      <div className={`container ${styles.top}`}>
-        <div className={styles.brand} data-reveal>
-          <span className={styles.mark} aria-hidden="true">
-            TA
-          </span>
-          <span className={styles.identity}>
-            <span className={styles.name}>{personal.name}</span>
-            <span className={styles.tagline}>
-              Building and learning, one line at a time.
-            </span>
-          </span>
-        </div>
-
-        <nav
-          aria-label="Social links"
-          data-reveal
-          style={{ animationDelay: "90ms" }}
-        >
-          <ul className={styles.socials}>
-            {socialLinks.map(({ label, href, Icon, external }) => (
-              <li key={label}>
-                <a
-                  href={href}
-                  className={styles.social}
-                  aria-label={label}
-                  title={label}
-                  {...(external
-                    ? { target: "_blank", rel: "noopener noreferrer" }
-                    : {})}
-                >
-                  <Icon />
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </div>
-
-      <div
-        className={`container ${styles.bottom}`}
-        data-reveal
-        style={{ animationDelay: "160ms" }}
-      >
-        <p className={styles.copy}>
+      <div className={`container ${styles.bar}`}>
+        <p className={styles.copy} data-reveal>
           © {year} {personal.name}
         </p>
-        <a href="#hero" className={styles.topLink}>
-          Back to top
-          <span aria-hidden="true">↑</span>
-        </a>
+
+        <div
+          className={styles.controls}
+          data-reveal
+          style={{ "--reveal-delay": "80ms" }}
+        >
+          {/* Quiet motion opt-out, kept away from the hero controls. */}
+          <button
+            type="button"
+            className={styles.motionToggle}
+            onClick={() => setMotionEnabled(!animated)}
+          >
+            {animated ? "Reduce motion" : "Enable motion"}
+          </button>
+
+          <span className={styles.divider} aria-hidden="true" />
+
+          <a href="#hero" className={styles.topLink}>
+            Back to top
+            <span className={styles.arrow} aria-hidden="true">
+              ↑
+            </span>
+          </a>
+        </div>
       </div>
     </footer>
   );

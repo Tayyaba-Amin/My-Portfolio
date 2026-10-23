@@ -19,7 +19,11 @@ export default function Contact() {
       <div className="container">
         <div className={styles.card} data-reveal="card">
           <div className={styles.inner}>
-            <p className={`eyebrow ${styles.eyebrow}`} data-reveal>
+            <p
+              className={`eyebrow ${styles.eyebrow}`}
+              data-reveal
+              style={{ "--reveal-delay": "100ms" }}
+            >
               Contact
             </p>
             <SplitText
@@ -28,13 +32,14 @@ export default function Contact() {
               className={styles.headline}
               data-reveal="words"
               text="Have an idea worth building?"
+              mode="lines"
               delay={80}
-              stagger={70}
+              lineStagger={150}
             />
             <p
               className={styles.invitation}
               data-reveal
-              style={{ animationDelay: "180ms" }}
+              style={{ "--reveal-delay": "260ms" }}
             >
               {contact.invitation}
             </p>
@@ -42,7 +47,7 @@ export default function Contact() {
             <div
               className={styles.actions}
               data-reveal
-              style={{ animationDelay: "260ms" }}
+              style={{ "--reveal-delay": "360ms" }}
             >
               <a
                 href={`mailto:${contact.email}`}
@@ -54,17 +59,8 @@ export default function Contact() {
               </a>
             </div>
 
-            <a
-              href={`mailto:${contact.email}`}
-              className={styles.emailText}
-              data-reveal
-              style={{ animationDelay: "330ms" }}
-            >
-              {contact.email}
-            </a>
-
             <ul className={styles.socials}>
-              <li data-reveal style={{ animationDelay: "410ms" }}>
+              <li data-reveal style={{ "--reveal-delay": "540ms" }}>
                 <a
                   href={contact.github}
                   target="_blank"
@@ -75,7 +71,7 @@ export default function Contact() {
                   GitHub
                 </a>
               </li>
-              <li data-reveal style={{ animationDelay: "500ms" }}>
+              <li data-reveal style={{ "--reveal-delay": "620ms" }}>
                 <a
                   href={contact.linkedin}
                   target="_blank"
@@ -91,7 +87,7 @@ export default function Contact() {
             <p
               className={styles.location}
               data-reveal
-              style={{ animationDelay: "480ms" }}
+              style={{ "--reveal-delay": "700ms" }}
             >
               <LocationIcon />
               {personal.location}

@@ -14,19 +14,16 @@
   --bg: #15111f;
   --bg-soft: #21192b;
   --surface: #292035;
-  --surface-2: #332843;
 
   /* Text — warm parchment */
   --text: #f8f1eb;
   --text-dim: #c9bcca;
   --text-muted: #9c8fa6;
 
-  /* Accents — coral leads actions, lilac supports, peach warms highlights */
+  /* Accents — coral leads actions, lilac supports */
   --coral: #ff6b81;
   --coral-soft: rgba(255, 107, 129, 0.14);
   --lilac: #c4a1ff;
-  --lilac-soft: rgba(196, 161, 255, 0.12);
-  --peach: #ffc6a8;
 
   /* Lines */
   --border: rgba(201, 188, 202, 0.14);
@@ -51,19 +48,16 @@
   --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
   /* Type scale */
-  --text-xs: 0.76rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
   --text-lg: 1.0625rem;
-  --text-xl: 1.25rem;
-  --text-2xl: clamp(1.45rem, 2.6vw, 1.85rem);
   --text-3xl: clamp(1.9rem, 3.6vw, 2.6rem);
 
   /* Layout */
   --container: 1180px;
   --gutter: clamp(1.15rem, 4vw, 2.5rem);
   --section-y: clamp(3.75rem, 7vw, 6.25rem);
-  --portrait-gap: clamp(1rem, 1.8vw, 1.75rem);
+  --portrait-gap: clamp(1.25rem, 1.8vw, 1.75rem);
   --nav-height: 4.5rem;
 
   /* Radii */
@@ -71,7 +65,6 @@
   --radius-sm: 12px;
   --radius-md: 16px;
   --radius-lg: 22px;
-  --radius-xl: 30px;
 
   /* Effects */
   --shadow-sm: 0 8px 24px -16px rgba(8, 4, 12, 0.85);
@@ -80,13 +73,8 @@
   /* Motion */
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --dur-micro: 180ms;
-  --dur-hover: 300ms;
-  --dur-reveal: 700ms;
-  --dur-hero: 900ms;
-  --stagger: 70ms;
+  --dur-reveal: 820ms;
   --transition: 0.25s var(--ease);
-  --transition-slow: 0.6s var(--ease);
 }
 
 /* ==========================================================================
@@ -220,16 +208,6 @@ button {
 .section {
   position: relative;
   padding-block: var(--section-y);
-}
-
-.section-head {
-  max-width: 42rem;
-  margin-bottom: clamp(2rem, 4vw, 3.25rem);
-}
-
-.section-head--center {
-  margin-inline: auto;
-  text-align: center;
 }
 
 /* ==========================================================================
@@ -459,13 +437,15 @@ button {
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
-  html {
+  html:not(.motion-on) {
     scroll-behavior: auto;
   }
 
-  *,
-  *::before,
-  *::after {
+  /* The site-level "enable animations" choice (html.motion-on) lifts every
+     one of these resets for visitors who explicitly opt in. */
+  html:not(.motion-on) *,
+  html:not(.motion-on) *::before,
+  html:not(.motion-on) *::after {
     animation-duration: 0.01ms !important;
     animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;

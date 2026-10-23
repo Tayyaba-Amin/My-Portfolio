@@ -1,5 +1,6 @@
 import ImagePlaceholder from "./ImagePlaceholder";
 import { GithubIcon, ExternalIcon, VideoIcon } from "./icons";
+import usePointerTilt from "../../hooks/usePointerTilt";
 import styles from "./ProjectCard.module.css";
 
 /** Parse a URL that may arrive wrapped in markdown-style [label](url). */
@@ -33,20 +34,22 @@ export default function ProjectCard({ project, index }) {
   const num = String(index + 1).padStart(2, "0");
   const liveUrl = parseUrl(demoUrl);
   const videoUrl = parseUrl(demoVideoUrl);
+  /* Normalized pointer position only; the card owns its own tilt. */
+  const cardRef = usePointerTilt(0);
 
   return (
     <article
+      ref={cardRef}
       className={styles.card}
       data-reveal
-      style={{ animationDelay: `${(index % 2) * 90}ms` }}
+      style={{ "--reveal-delay": `${(index % 3) * 110}ms` }}
     >
       <div className={styles.media}>
         <ImagePlaceholder
           src={imagePath}
           alt={`${title} project screenshot`}
           fallback={title}
-          aspect="16 / 10"
-          className={styles.image}
+          aspect="3 / 2"
         />
       </div>
 
@@ -61,9 +64,9 @@ export default function ProjectCard({ project, index }) {
         <h3 className={styles.title}>{title}</h3>
 
         {builtFor && (
-          <p className={styles.builtFor}>
+          <p className={styles.builtFor} title={builtFor}>
             <span className={styles.builtDot} aria-hidden="true" />
-            {builtFor}
+            <span className={styles.builtText}>{builtFor}</span>
           </p>
         )}
 
@@ -71,13 +74,17 @@ export default function ProjectCard({ project, index }) {
 
         <ul className={styles.tech} aria-label={`${title} technologies`}>
           {tech.map((item) => (
-            <li key={item} className="chip">
+            <li key={item} className={styles.chip}>
               {item}
             </li>
           ))}
         </ul>
 
-        {note && <p className={styles.note}>{note}</p>}
+        {note && (
+          <p className={styles.note} title={note}>
+            {note}
+          </p>
+        )}
 
         <div className={styles.actions}>
           {repoUrl && (
@@ -119,7 +126,7 @@ export default function ProjectCard({ project, index }) {
               aria-label={`${title} demo video`}
             >
               <VideoIcon />
-              Demo Video
+              Video
               <span className={styles.arrow} aria-hidden="true">
                 →
               </span>

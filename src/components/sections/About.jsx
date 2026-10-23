@@ -20,16 +20,22 @@ export default function About() {
             className="section-title"
             data-reveal="words"
             text={about.headline}
+            mode="lines"
             delay={60}
-            stagger={55}
+            lineStagger={150}
           />
-          <span className={styles.headRule} data-reveal="rule" aria-hidden="true" />
+          <span
+            className={styles.headRule}
+            data-reveal="rule"
+            style={{ "--reveal-delay": "200ms" }}
+            aria-hidden="true"
+          />
         </header>
 
         <div
           className={styles.body}
-          data-reveal
-          style={{ animationDelay: "150ms" }}
+          data-reveal="slide"
+          style={{ "--reveal-delay": "180ms" }}
         >
           {personal.bio.map((para) => (
             <p key={para} className={styles.para}>
@@ -42,7 +48,7 @@ export default function About() {
           <p
             className={styles.focusLabel}
             data-reveal
-            style={{ animationDelay: "210ms" }}
+            style={{ "--reveal-delay": "320ms" }}
           >
             Focus areas
           </p>
@@ -52,7 +58,7 @@ export default function About() {
                 key={item}
                 className={styles.focusItem}
                 data-reveal
-                style={{ animationDelay: `${260 + i * 60}ms` }}
+                style={{ "--reveal-delay": `${380 + i * 80}ms` }}
               >
                 <span className={styles.dot} aria-hidden="true" />
                 {item}

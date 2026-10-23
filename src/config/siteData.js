@@ -10,7 +10,8 @@ export const personal = {
   bio: [
     "My journey in software development is driven by curiosity and hands-on learning. Through personal projects and hackathons, I've explored different technologies, collaborated with others, and worked on solutions to practical problems. I enjoy experimenting with new ideas and continuously improving how I design and build applications.",
   ],
-  portraitImage: "/images/profile/profile.jpg",
+  /* Cutout derived from the original photograph; the studio wall was removed. */
+  portraitCutout: "/images/profile/profile-cutout.png",
 };
 
 export const hero = {

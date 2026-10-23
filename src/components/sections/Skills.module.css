@@ -78,43 +78,44 @@
   transform: translateY(-2px);
 }
 
-/* Badges follow their group in a short cascade, once. */
+/* Badges follow their group in a short cascade, once. The shared
+   --reveal-delay keeps the cascade starting after the panel itself lands. */
 .group:global(.is-visible) .items li {
-  animation: badge-in 450ms var(--ease-out) backwards;
+  animation: badge-in 560ms var(--ease-out) backwards;
 }
 
 .group:global(.is-visible) .items li:nth-child(1) {
-  animation-delay: 120ms;
+  animation-delay: calc(var(--reveal-delay, 0ms) + 200ms);
 }
 
 .group:global(.is-visible) .items li:nth-child(2) {
-  animation-delay: 155ms;
+  animation-delay: calc(var(--reveal-delay, 0ms) + 248ms);
 }
 
 .group:global(.is-visible) .items li:nth-child(3) {
-  animation-delay: 190ms;
+  animation-delay: calc(var(--reveal-delay, 0ms) + 296ms);
 }
 
 .group:global(.is-visible) .items li:nth-child(4) {
-  animation-delay: 225ms;
+  animation-delay: calc(var(--reveal-delay, 0ms) + 344ms);
 }
 
 .group:global(.is-visible) .items li:nth-child(5) {
-  animation-delay: 260ms;
+  animation-delay: calc(var(--reveal-delay, 0ms) + 392ms);
 }
 
 .group:global(.is-visible) .items li:nth-child(6) {
-  animation-delay: 295ms;
+  animation-delay: calc(var(--reveal-delay, 0ms) + 440ms);
 }
 
 .group:global(.is-visible) .items li:nth-child(n + 7) {
-  animation-delay: 330ms;
+  animation-delay: calc(var(--reveal-delay, 0ms) + 488ms);
 }
 
 @keyframes badge-in {
   from {
     opacity: 0;
-    transform: translateY(7px);
+    transform: translateY(16px) scale(0.88);
   }
   to {
     opacity: 1;
